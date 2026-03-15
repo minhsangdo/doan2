@@ -1,0 +1,361 @@
+=== PARAGRAPHS ===
+P1: TRƯỜNG ĐẠI HỌC NAM CẦN THƠ
+P2: KHOA CÔNG NGHỆ THÔNG TIN
+P3: KẾ HOẠCH ĐỒ ÁN TỐT NGHIỆP
+P4: CHATBOT TƯ VẤN TUYỂN SINH
+P5: ĐẠI HỌC NAM CẦN THƠ
+P6: ỨNG DỤNG CÔNG NGHỆ GRAPH RAG + NEO4J
+P8: Năm học 2024 – 2025
+P9: Cần Thơ, tháng 8/2025
+P11: MỤC LỤC
+P13: 1. TỔNG QUAN DỰ ÁN
+P14: 1.1 Mô tả đề tài
+P15: Đồ án xây dựng một Chatbot thông minh hỗ trợ tư vấn tuyển sinh đại học cho Trường Đại học Nam Cần Thơ (DNC), ứng dụng công nghệ Graph RAG (Retrieval-Augmented Generation) kết hợp với cơ sở dữ liệu đồ thị Neo4j. Hệ thống có khả năng trả lời tự động các câu hỏi về ngành học, điểm chuẩn, phương thức xét tuyển và thông tin nhập học năm 2025.
+P16: 1.2 Mục tiêu
+P17: Xây dựng sơ đồ tri thức (Knowledge Graph) từ dữ liệu tuyển sinh thực tế của DNC
+P18: Triển khai pipeline Graph RAG để truy xuất thông tin chính xác, có ngữ cảnh
+P19: Phát triển giao diện chatbot thân thiện, dễ sử dụng cho thí sinh
+P20: Tích hợp đầy đủ 45 ngành học và điểm chuẩn năm 2025
+P21: Hỗ trợ 9 phương thức xét tuyển theo quy định của Bộ GD&ĐT
+P22: 1.3 Phạm vi hệ thống
+P23: Dữ liệu: Thông tin tuyển sinh 2025 và bảng điểm chuẩn chính thức của DNC
+P24: Người dùng: Thí sinh, phụ huynh, giáo viên hướng nghiệp
+P25: Nền tảng: Web application (có thể mở rộng sang mobile)
+P26: Ngôn ngữ: Tiếng Việt
+P28: 2. SƠ ĐỒ PHÂN RÃ CHỨC NĂNG (BFD)
+P29: 2.1 Chức năng tổng thể hệ thống
+P30: Hệ thống Chatbot Tư vấn Tuyển sinh DNC được phân rã thành 5 nhóm chức năng chính:
+P32: 2.2 Phân rã chi tiết F3 - Tư vấn tuyển sinh
+P33: F3.1 - Nhận và phân tích câu hỏi: Tokenize, phân loại intent (ngành học / điểm chuẩn / phương thức / khác)
+P34: F3.2 - Truy xuất Graph RAG: Tìm kiếm vector similarity + duyệt quan hệ trong Neo4j
+P35: F3.3 - Xây dựng ngữ cảnh: Lấy subgraph liên quan, chuẩn bị context cho LLM
+P36: F3.4 - Sinh câu trả lời: LLM (GPT-4 / Claude) tạo câu trả lời tự nhiên, chính xác
+P37: F3.5 - Xử lý fallback: Nếu không tìm được thông tin, chuyển hướng hoặc thông báo
+P38: 2.3 Phân rã chi tiết F1 - Quản lý tri thức
+P39: F1.1 - Import dữ liệu PDF: Trích xuất text từ file tuyển sinh, chuẩn hóa cấu trúc
+P40: F1.2 - Entity Extraction: Nhận diện ngành học, mã ngành, điểm chuẩn, tổ hợp môn
+P41: F1.3 - Relation Building: Xác định quan hệ giữa các thực thể (ngành-tổ hợp, ngành-điểm chuẩn)
+P42: F1.4 - Graph Insertion: Chèn node và relationship vào Neo4j với MERGE
+P43: F1.5 - Embedding Generation: Tạo vector embedding cho mỗi thực thể
+P45: 3. SƠ ĐỒ USE CASE
+P46: 3.1 Tác nhân (Actors)
+P47: Thí sinh / Phụ huynh: Người dùng chính, tương tác trực tiếp với chatbot
+P48: Admin / Chuyên viên tuyển sinh: Quản lý và cập nhật dữ liệu
+P49: Hệ thống Neo4j: Cơ sở dữ liệu đồ thị (actor ngoại vi)
+P50: LLM API: Mô hình ngôn ngữ lớn (OpenAI / Anthropic)
+P51: 3.2 Danh sách Use Case
+P53: 3.3 Đặc tả Use Case UC01 - Hỏi về ngành học
+P54: Tiền điều kiện: Thí sinh đã mở giao diện chatbot
+P55: Luồng chính: Thí sinh nhập câu hỏi → NLP phân tích intent → Graph RAG tìm kiếm → LLM sinh câu trả lời → Hiển thị kết quả
+P56: Luồng thay thế: Không tìm thấy ngành → Gợi ý ngành liên quan hoặc yêu cầu làm rõ
+P57: Hậu điều kiện: Thí sinh nhận được thông tin ngành học chính xác, có thể tiếp tục hội thoại
+P59: 4. SƠ ĐỒ LUỒNG DỮ LIỆU (DFD)
+P60: 4.1 DFD Mức 0 (Context Diagram)
+P61: Hệ thống là hộp đen nhận input từ Thí sinh và Admin, tương tác với Neo4j và LLM API, xuất kết quả trả lời:
+P62: Luồng vào: Câu hỏi từ thí sinh → Hệ thống chatbot
+P63: Luồng vào: Dữ liệu tuyển sinh PDF → Admin → Hệ thống
+P64: Luồng ra: Câu trả lời tư vấn → Thí sinh
+P65: Luồng ra: Báo cáo thống kê → Admin
+P66: Kho dữ liệu: Neo4j Knowledge Graph (hai chiều)
+P67: Dịch vụ ngoài: OpenAI / Anthropic API (hai chiều)
+P68: 4.2 DFD Mức 1 - Phân rã các tiến trình chính
+P69: Hệ thống được phân rã thành 4 tiến trình chính:
+P70: P1 - Xử lý câu hỏi: Nhận input → tokenize → phân loại intent → tạo query vector
+P71: P2 - Graph RAG Retrieval: Vector search trên Neo4j + duyệt đồ thị quan hệ → tập hợp context
+P72: P3 - Sinh câu trả lời: Gửi context + câu hỏi lên LLM API → nhận response → format
+P73: P4 - Quản lý Knowledge Graph: Import PDF → extract → normalize → insert Neo4j → embed
+P74: 4.3 DFD Mức 2 - Chi tiết P2 (Graph RAG Retrieval)
+P75: P2.1 - Vector Similarity Search: Embedding câu hỏi → cosine similarity với db.index.vector → Top-K nodes
+P76: P2.2 - Graph Traversal: Từ Top-K nodes → duyệt 1-2 hop quan hệ (BELONGS_TO, HAS_SCORE, USES_COMBO)
+P77: P2.3 - Context Assembly: Gộp thông tin node + relationship + metadata thành chuỗi context
+P78: P2.4 - Reranking: Đánh trọng số context dựa trên độ liên quan và độ mới của dữ liệu
+P79: 4.4 DFD Mức 2 - Chi tiết P4 (Knowledge Graph Builder)
+P80: P4.1 - PDF Extraction: pdfplumber/PyMuPDF trích xuất text, bảng từ file PDF
+P81: P4.2 - LLM Entity Extraction: Prompt LLM để nhận diện entity (Nganh, TohopMon, DiemChuan, PhuongThuc)
+P82: P4.3 - Entity Resolution: Chuẩn hóa tên ngành, dedup, gán ID chuẩn theo mã ngành
+P83: P4.4 - Cypher Generation: Tạo lệnh MERGE cho node và relationship
+P84: P4.5 - Batch Insert: Nhóm lệnh Cypher, thực thi theo batch qua neo4j-driver
+P85: P4.6 - Embedding & Indexing: Gọi OpenAI Embeddings API → lưu vector → tạo vector index
+P87: 5. SƠ ĐỒ TRI THỨC (KNOWLEDGE GRAPH SCHEMA)
+P88: 5.1 Các loại Node
+P90: 5.2 Các loại Relationship
+P92: 5.3 Cypher mẫu xây dựng Knowledge Graph
+P93: // Tạo node ngành học
+P94: MERGE (n:Nganh {ma_nganh: '7720101'})
+P95: SET n.ten = 'Y khoa', n.nhom = 'Y-Duoc',
+P96:     n.embedding = $vector_embedding
+P98: // Tạo điểm chuẩn và kết nối
+P99: MERGE (d:DiemChuan {ma_nganh: '7720101', nam: 2025})
+P100: SET d.diem_thpt = 20.5, d.diem_hocba = 24.0
+P101:   , d.diem_dgnl = 650, d.diem_vsat = 290
+P102: MERGE (n)-[:HAS_SCORE]->(d)
+P104: // Kết nối tổ hợp môn
+P105: MERGE (t:TohopMon {ma_tohop: 'B00'})
+P106: SET t.ten = 'Toán - Hóa - Sinh'
+P107: MERGE (n)-[:USES_COMBO]->(t)
+P109: 6. KIẾN TRÚC HỆ THỐNG
+P110: 6.1 Tổng quan kiến trúc
+P111: Hệ thống theo kiến trúc 3-layer (Presentation - Business Logic - Data), tích hợp thêm AI/ML layer:
+P112: Presentation Layer: Giao diện web chatbot (React + Next.js)
+P113: API Gateway: FastAPI / Flask REST API, xử lý request/response
+P114: Business Logic Layer: Graph RAG Engine, NLP, Intent Classifier
+P115: AI/ML Layer: LLM API (OpenAI/Anthropic), Embedding Model
+P116: Data Layer: Neo4j Graph DB + Vector Index, File storage
+P117: 6.2 Luồng xử lý câu hỏi (Request Flow)
+P118: Bước 1: User nhập câu hỏi qua giao diện chat
+P119: Bước 2: Frontend gửi POST /api/chat với message + session_id
+P120: Bước 3: API nhận request, gọi Intent Classifier phân loại câu hỏi
+P121: Bước 4: Embedding service chuyển câu hỏi thành vector 1536 chiều
+P122: Bước 5: Neo4j Vector Index tìm Top-K node tương tự (cosine similarity)
+P123: Bước 6: Graph Traversal mở rộng 1-2 hop lấy context liên quan
+P124: Bước 7: Context Builder đóng gói subgraph thành chuỗi văn bản
+P125: Bước 8: LLM API nhận context + question → sinh câu trả lời
+P126: Bước 9: Response được format và trả về frontend
+P127: Bước 10: Lưu log hội thoại vào Neo4j cho analytics
+P128: 6.3 Công nghệ sử dụng
+P131: 7. CẤU TRÚC THƯ MỤC DỰ ÁN
+P132: 7.1 Sơ đồ thư mục
+P133: dnc-chatbot/
+P134: ├── frontend/                     # Giao diện React
+P135: │   ├── src/
+P136: │   │   ├── components/
+P137: │   │   │   ├── ChatBox.jsx       # Component chat chính
+P138: │   │   │   ├── MessageBubble.jsx # Bong bóng tin nhắn
+P139: │   │   │   ├── SuggestCard.jsx   # Gợi ý câu hỏi nhanh
+P140: │   │   │   └── LoadingDots.jsx   # Animation loading
+P141: │   │   ├── pages/
+P142: │   │   │   ├── index.js          # Trang chủ chatbot
+P143: │   │   │   └── admin/            # Trang quản trị
+P144: │   │   ├── hooks/useChat.js      # Custom hook quản lý chat
+P145: │   │   └── styles/globals.css
+P146: │   └── package.json
+P147: │
+P148: ├── backend/                      # FastAPI Backend
+P149: │   ├── api/
+P150: │   │   ├── routes/
+P151: │   │   │   ├── chat.py           # POST /api/chat
+P152: │   │   │   ├── admin.py          # CRUD ngành, điểm chuẩn
+P153: │   │   │   └── analytics.py      # GET /api/analytics
+P154: │   │   └── middleware.py         # CORS, auth, logging
+P155: │   ├── core/
+P156: │   │   ├── graph_rag.py          # Graph RAG pipeline chính
+P157: │   │   ├── neo4j_client.py       # Kết nối và query Neo4j
+P158: │   │   ├── embeddings.py         # Tạo và lưu vector embedding
+P159: │   │   ├── intent_classifier.py  # Phân loại intent câu hỏi
+P160: │   │   └── llm_client.py         # Wrapper LLM API
+P161: │   ├── knowledge/
+P162: │   │   ├── pdf_extractor.py      # Trích xuất text từ PDF
+P163: │   │   ├── entity_extractor.py   # LLM NER entity extraction
+P164: │   │   ├── graph_builder.py      # Build Knowledge Graph
+P165: │   │   └── data_normalizer.py    # Chuẩn hóa và dedup
+P166: │   ├── models/
+P167: │   │   ├── schemas.py            # Pydantic request/response models
+P168: │   │   └── graph_models.py       # Neo4j node/rel models
+P169: │   └── main.py                   # FastAPI app entry point
+P170: │
+P171: ├── data/
+P172: │   ├── raw/                      # PDF gốc tuyển sinh DNC
+P173: │   │   ├── thong-tin-tuyen-sinh-2025.pdf
+P174: │   │   └── diem-chuan-2025.pdf
+P175: │   ├── processed/                # JSON đã trích xuất
+P176: │   │   ├── nganh_hoc.json        # 45 ngành học
+P177: │   │   ├── diem_chuan.json       # Bảng điểm chuẩn
+P178: │   │   └── tohop_mon.json        # Các tổ hợp môn
+P179: │   └── cypher/                   # Script Cypher seed data
+P180: │       ├── 01_constraints.cypher
+P181: │       ├── 02_nodes.cypher
+P182: │       └── 03_relationships.cypher
+P183: │
+P184: ├── scripts/
+P185: │   ├── build_kg.py               # Chạy toàn bộ pipeline xây dựng KG
+P186: │   ├── seed_neo4j.py             # Import seed data vào Neo4j
+P187: │   └── evaluate_rag.py           # Đánh giá độ chính xác hệ thống
+P188: │
+P189: ├── docker-compose.yml            # Neo4j + Backend + Frontend
+P190: ├── .env.example                  # Template biến môi trường
+P191: └── README.md
+P194: 8. CHỨC NĂNG TỪNG FILE QUAN TRỌNG
+P197: 9. CƠ SỞ DỮ LIỆU NEO4J
+P198: 9.1 Thống kê dữ liệu DNC 2025
+P200: 9.2 Cypher Query mẫu cho RAG
+P201: // Query tra cứu điểm chuẩn ngành Y khoa
+P202: MATCH (n:Nganh {ma_nganh: '7720101'})-[:HAS_SCORE]->(d:DiemChuan)
+P203: RETURN n.ten, d.diem_thpt, d.diem_hocba, d.diem_dgnl, d.diem_vsat
+P205: // Query lấy tất cả ngành nhóm Y-Dược kèm điểm
+P206: MATCH (ng:NhomNganh {ten: 'Y-Duoc'})<-[:BELONGS_TO]-(n:Nganh)
+P207: MATCH (n)-[:HAS_SCORE]->(d:DiemChuan {nam: 2025})
+P208: RETURN n.ten, n.ma_nganh, d.diem_thpt ORDER BY d.diem_thpt DESC
+P210: // Vector search + graph context (Graph RAG query)
+P211: CALL db.index.vector.queryNodes('entity_embedding', 5, $question_embedding)
+P212: YIELD node, score
+P213: MATCH (node)-[:HAS_SCORE]->(d:DiemChuan)
+P214: MATCH (node)-[:USES_COMBO]->(t:TohopMon)
+P215: RETURN node.ten, d.diem_thpt, collect(t.ten) as tohop, score
+P216: ORDER BY score DESC
+P219: 10. DATASET
+P220: 10.1 Nguồn dữ liệu
+P221: File thong-tin-tuyen-sinh-dai-hoc-nam-can-tho-2025.pdf: 45 ngành học, 9 phương thức xét tuyển, tổ hợp môn
+P222: File Thong_bao_diem_chuan_2025_DNC_22-8-2025.pdf: Điểm chuẩn chính thức đợt 1 (4 loại: THPT/học bạ/ĐGNL/V-SAT)
+P223: 10.2 Cấu trúc dataset JSON đã xử lý
+P224: // nganh_hoc.json
+P225: [{
+P226:   "ma_nganh": "7720101",
+P227:   "ten": "Y khoa (Bac si da khoa)",
+P228:   "nhom": "Y-Duoc",
+P229:   "tohop_mon": ["B00","A00","A02","B03","D07","D08"],
+P230:   "mo_ta": "Dao tao bac si y khoa da khoa 6 nam"
+P231: }]
+P233: // diem_chuan.json
+P234: [{
+P235:   "ma_nganh": "7720101", "nam": 2025,
+P236:   "diem_thpt": 20.5,  "diem_hocba": 24.0,
+P237:   "diem_dgnl": 650,   "diem_vsat": 290
+P238: }]
+P240: 10.3 Câu hỏi mẫu cho dataset đánh giá (Q&A pairs)
+P243: 11. CÀI ĐẶT & CHẠY
+P244: 11.1 Yêu cầu hệ thống
+P245: Python 3.11+, Node.js 18+
+P246: Neo4j 5.x (Community Edition hoặc AuraDB Free)
+P247: OpenAI API Key (hoặc Anthropic API Key)
+P248: RAM tối thiểu 8GB (khuyến nghị 16GB cho Neo4j)
+P249: 11.2 Cài đặt môi trường
+P250: # 1. Clone repository
+P251: git clone https://github.com/your-repo/dnc-chatbot.git
+P252: cd dnc-chatbot
+P254: # 2. Cài đặt backend dependencies
+P255: cd backend
+P256: pip install -r requirements.txt
+P258: # 3. Cài đặt frontend dependencies
+P259: cd ../frontend
+P260: npm install
+P262: # 4. Cấu hình biến môi trường
+P263: cp .env.example .env
+P264: # Điền NEO4J_URI, NEO4J_USER, NEO4J_PASSWORD, OPENAI_API_KEY
+P265: 11.3 Khởi tạo dữ liệu
+P266: # 5. Khởi động Neo4j bằng Docker
+P267: docker-compose up -d neo4j
+P269: # 6. Chạy pipeline xây dựng Knowledge Graph
+P270: cd backend
+P271: python scripts/build_kg.py --pdf-dir ../data/raw/
+P273: # Output: Đã tạo 45 node Nganh, 45 DiemChuan,
+P274: #         ~20 TohopMon, 9 PhuongThuc, ~400 relationships
+P275: 11.4 Chạy hệ thống
+P276: # 7. Khởi động backend API
+P277: cd backend && uvicorn main:app --reload --port 8000
+P279: # 8. Khởi động frontend
+P280: cd frontend && npm run dev
+P282: # 9. Truy cập: http://localhost:3000
+P283: #    Admin:   http://localhost:3000/admin
+P284: #    API Docs: http://localhost:8000/docs
+P285: 11.5 Kiểm thử hệ thống
+P286: # Chạy test đánh giá độ chính xác RAG
+P287: python scripts/evaluate_rag.py --qa-file data/qa_pairs.json
+P289: # Kết quả kỳ vọng: Accuracy > 85%, Latency < 3s
+P292: 12. KẾ HOẠCH THỰC HIỆN
+P294: 12.1 Rủi ro và biện pháp
+P295: Rủi ro: Độ chính xác LLM thấp → Biện pháp: Fine-tune prompt, thêm few-shot examples, tăng context
+P296: Rủi ro: Neo4j vector search chậm → Biện pháp: Tối ưu index HNSW, cache embedding phổ biến
+P297: Rủi ro: Chi phí API OpenAI cao → Biện pháp: Dùng GPT-4o-mini cho phân loại, GPT-4o chỉ cho sinh câu trả lời
+P298: Rủi ro: Dữ liệu PDF thay đổi hàng năm → Biện pháp: Xây dựng pipeline tự động cập nhật KG
+P300: 13. KẾT LUẬN
+P301: Kế hoạch đồ án Chatbot Tư vấn Tuyển sinh DNC ứng dụng Graph RAG + Neo4j là một giải pháp toàn diện, có tính ứng dụng thực tế cao. Hệ thống không chỉ giải quyết bài toán tư vấn tuyển sinh mà còn đặt nền móng cho việc mở rộng sang các ứng dụng AI khác tại Trường Đại học Nam Cần Thơ.
+P302: Điểm nổi bật: Tận dụng Graph RAG để cung cấp câu trả lời có ngữ cảnh sâu hơn RAG truyền thống, dựa trên quan hệ giữa các thực thể tri thức trong đồ thị. Dữ liệu thực tế từ tài liệu tuyển sinh 2025 của DNC đảm bảo tính chính xác và cập nhật.
+
+=== TABLES ===
+
+--- Table 0 ---
+  R0: Nhóm chức năng || Module || Chức năng chi tiết
+  R1: F1 - Quản lý tri thức || Graph Knowledge Base || Xây dựng & cập nhật sơ đồ tri thức ngành học, điểm chuẩn, phương thức xét tuyển
+  R2: F2 - Tìm kiếm & Truy xuất || Graph RAG Retriever || Vector search + Graph traversal, hybrid retrieval, context builder
+  R3: F3 - Tư vấn tuyển sinh || Chatbot Engine || Nhận câu hỏi, phân tích ý định, tạo câu trả lời dựa trên ngữ cảnh đồ thị
+  R4: F4 - Quản lý dữ liệu || Data Manager || CRUD ngành học, điểm chuẩn, phương thức xét tuyển; nhập liệu hàng loạt
+  R5: F5 - Báo cáo thống kê || Analytics || Thống kê câu hỏi phổ biến, phân tích ngành được quan tâm, log hội thoại
+
+--- Table 1 ---
+  R0: ID || Tên Use Case || Mô tả || Actor
+  R1: UC01 || Hỏi về ngành học || Tìm kiếm và hiển thị thông tin ngành, tổ hợp môn xét tuyển || Thí sinh
+  R2: UC02 || Tra cứu điểm chuẩn || Xem điểm chuẩn theo ngành, phương thức (THPT/học bạ/ĐGNL/V-SAT) || Thí sinh
+  R3: UC03 || Tư vấn phương thức xét tuyển || Gợi ý phương thức phù hợp dựa trên kết quả và định hướng của thí sinh || Thí sinh
+  R4: UC04 || Hỏi thủ tục nhập học || Hướng dẫn các bước xác nhận nhập học, deadline, hồ sơ cần chuẩn bị || Thí sinh
+  R5: UC05 || So sánh ngành học || So sánh điểm chuẩn và tổ hợp môn giữa các ngành trong cùng nhóm || Thí sinh
+  R6: UC06 || Cập nhật dữ liệu ngành || Thêm / sửa / xóa thông tin ngành học trong hệ thống || Admin
+  R7: UC07 || Cập nhật điểm chuẩn || Nhập điểm chuẩn mới sau mỗi đợt xét tuyển || Admin
+  R8: UC08 || Xem báo cáo hội thoại || Thống kê câu hỏi thường gặp, phân tích trend quan tâm || Admin
+  R9: UC09 || Import dữ liệu PDF || Tải và phân tích tự động file PDF tuyển sinh, cập nhật knowledge graph || Admin
+  R10: UC10 || Rebuild knowledge graph || Xây dựng lại toàn bộ đồ thị tri thức từ dữ liệu mới nhất || Admin
+
+--- Table 2 ---
+  R0: Node Label || Thuộc tính chính || Mô tả
+  R1: Nganh || ma_nganh, ten, nhom, mo_ta, embedding || Thông tin ngành học (45 ngành của DNC)
+  R2: DiemChuan || nam, diem_thpt, diem_hocba, diem_dgnl, diem_vsat || Điểm chuẩn trúng tuyển theo năm và phương thức
+  R3: TohopMon || ma_tohop, ten, cac_mon || Tổ hợp môn xét tuyển (A00, B00, D01...)
+  R4: PhuongThuc || ma_pt, ten, mo_ta || 9 phương thức xét tuyển (mã 100, 200, 301, 402...)
+  R5: NhomNganh || ten, icon || Nhóm lớn: Y-Dược, CNTT, Kinh tế, Kỹ thuật...
+  R6: Document || ten_file, ngay_cap_nhat, url || File PDF nguồn dữ liệu tuyển sinh
+
+--- Table 3 ---
+  R0: Relationship || Từ Node || Đến Node || Thuộc tính
+  R1: BELONGS_TO || Nganh || NhomNganh || (none)
+  R2: HAS_SCORE || Nganh || DiemChuan || nam: 2025
+  R3: USES_COMBO || Nganh || TohopMon || (none)
+  R4: ACCEPTS_METHOD || Nganh || PhuongThuc || (none)
+  R5: SOURCED_FROM || Nganh || Document || trang: [1,2,3]
+  R6: RELATED_TO || Nganh || Nganh || ly_do: cung_khoa / tuong_tu
+
+--- Table 4 ---
+  R0: Tầng || Công nghệ || Mục đích
+  R1: Frontend || React 18, Next.js 14, TailwindCSS || Giao diện chatbot responsive
+  R2: Backend API || Python 3.11, FastAPI || REST API, xử lý business logic
+  R3: Graph DB || Neo4j 5.x Community/AuraDB || Lưu trữ và truy vấn Knowledge Graph
+  R4: Vector Search || Neo4j Vector Index (HNSW) || Tìm kiếm ngữ nghĩa trên node embedding
+  R5: LLM || OpenAI GPT-4o / Anthropic Claude || Sinh câu trả lời tự nhiên
+  R6: Embedding || text-embedding-3-small (1536d) || Vector hóa text entity và câu hỏi
+  R7: RAG Framework || LangChain + Neo4jVector || Pipeline Graph RAG end-to-end
+  R8: PDF Parser || pdfplumber, PyMuPDF || Trích xuất dữ liệu từ file tuyển sinh
+  R9: NLP || spaCy vi, LLMGraphTransformer || NER, phân loại intent, relation extraction
+  R10: Containerize || Docker, Docker Compose || Đóng gói và triển khai
+
+--- Table 5 ---
+  R0: File || Chức năng chi tiết
+  R1: core/graph_rag.py || Pipeline Graph RAG chính: nhận câu hỏi → vector search → graph traversal → build context → call LLM → return answer
+  R2: core/neo4j_client.py || Kết nối Neo4j driver, thực thi Cypher query, batch insert, vector similarity search
+  R3: core/embeddings.py || Gọi OpenAI Embeddings API, cache embedding, update vector cho node trong Neo4j
+  R4: core/intent_classifier.py || Phân loại câu hỏi: ngành_hoc / diem_chuan / phuong_thuc / nhap_hoc / khac
+  R5: knowledge/pdf_extractor.py || Dùng pdfplumber trích xuất text và bảng từ PDF, làm sạch text, nhận diện cấu trúc
+  R6: knowledge/entity_extractor.py || Prompt LLM với few-shot examples để trích xuất Nganh, TohopMon, DiemChuan, PhuongThuc từ text
+  R7: knowledge/graph_builder.py || Nhận entities và relations đã extract → tạo Cypher MERGE → batch insert vào Neo4j → tạo embedding
+  R8: api/routes/chat.py || POST /api/chat: nhận message, session_id → gọi graph_rag.py → trả về answer + sources + suggested_questions
+  R9: api/routes/admin.py || CRUD API cho ngành học, điểm chuẩn, phương thức. Endpoint trigger rebuild knowledge graph
+  R10: scripts/build_kg.py || Orchestrator chạy toàn bộ pipeline: PDF → extract → normalize → insert Neo4j → embed → index
+  R11: frontend/ChatBox.jsx || Component chính: quản lý state hội thoại, gửi message qua API, render tin nhắn, hiển thị typing indicator
+  R12: data/processed/*.json || Dataset đã chuẩn hóa: 45 ngành học, bảng điểm chuẩn 2025, danh sách tổ hợp môn. Dùng để seed Neo4j
+
+--- Table 6 ---
+  R0: Loại dữ liệu || Số lượng || Ghi chú
+  R1: Node Nganh || 45 || 45 ngành chính quy, bao gồm chuyên ngành đặc biệt
+  R2: Node DiemChuan || 45 || Mỗi ngành 1 node DiemChuan năm 2025
+  R3: Node TohopMon || ~20 || A00, A01, A02, B00, B03, C00, D01, D07, D08, X06... (dùng chung)
+  R4: Node PhuongThuc || 9 || 9 phương thức xét tuyển (mã 100→411)
+  R5: Node NhomNganh || 8 || Y-Dược, CNTT, Kỹ thuật, Kinh tế, Luật, Du lịch, XD, Môi trường
+  R6: Rel USES_COMBO || ~250 || Mỗi ngành dùng trung bình ~5-7 tổ hợp môn
+  R7: Rel HAS_SCORE || 45 || Kết nối ngành với điểm chuẩn 2025
+  R8: Vector dimensions || 1536 || OpenAI text-embedding-3-small, cosine similarity
+
+--- Table 7 ---
+  R0: Câu hỏi mẫu || Câu trả lời kỳ vọng
+  R1: Điểm chuẩn ngành Y khoa năm 2025 là bao nhiêu? || 20.5 điểm (thi THPT), 24.0 điểm (học bạ)
+  R2: Ngành CNTT xét tuyển tổ hợp môn gì? || A00, A01, A02, C01, D01, D84, X06, X26 và các tổ hợp khác
+  R3: Có bao nhiêu phương thức xét tuyển tại DNC? || 9 phương thức từ xét thẳng đến kết quả thi V-SAT
+  R4: Ngành nào có điểm chuẩn THPT cao nhất? || Y khoa và Răng Hàm Mặt: 20.5 điểm
+  R5: Thời hạn xác nhận nhập học đợt 1 là khi nào? || Trước 17h00 ngày 30/08/2025
+  R6: Tôi có điểm ĐGNL ĐHQG TP.HCM 700 có vào được không? || Đủ điều kiện vào các ngành Y-Dược (cần 550-650), tất cả ngành khác (500)
+
+--- Table 8 ---
+  R0: Tuần || Công việc || Kết quả || Ghi chú
+  R1: 1-2 || Phân tích yêu cầu, thiết kế KG schema, nghiên cứu Graph RAG || Schema Neo4j, Use Case, DFD || Tài liệu này
+  R2: 3-4 || Xử lý PDF, xây dựng pipeline trích xuất entity, seed Neo4j || Knowledge Graph đủ dữ liệu DNC 2025 || Dùng LLMGraphTransformer
+  R3: 5-6 || Xây dựng Graph RAG engine, vector search, context builder || API /api/chat hoạt động cơ bản || LangChain + Neo4jVector
+  R4: 7-8 || Phát triển giao diện chatbot React, tích hợp API || UI chatbot đầy đủ chức năng || Next.js + TailwindCSS
+  R5: 9-10 || Xây dựng trang Admin, CRUD dữ liệu, analytics dashboard || Admin panel hoàn chỉnh || Bảo vệ bằng auth
+  R6: 11-12 || Kiểm thử, đánh giá accuracy, tối ưu prompt & query || Accuracy > 85%, latency < 3s || Q&A evaluation set
+  R7: 13-14 || Deploy, viết báo cáo, chuẩn bị bảo vệ đồ án || Hệ thống live + báo cáo đầy đủ || Docker Compose

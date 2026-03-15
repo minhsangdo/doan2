@@ -1,0 +1,47 @@
+[
+  {
+    "ma_pt": "301",
+    "ten": "Xét tuyển thẳng",
+    "mo_ta": "Áp dụng cho các đối tượng được quy định tại Điều 8 của Quy chế tuyển sinh trình độ đại học của Bộ GD&ĐT."
+  },
+  {
+    "ma_pt": "100",
+    "ten": "Xét điểm kỳ thi THPT năm 2025",
+    "mo_ta": "Điểm xét tuyển (ĐXT) = Điểm Môn 1 + Môn 2 + Môn 3 + Điểm ưu tiên. Dựa trên kết quả thi tốt nghiệp THPT năm 2025."
+  },
+  {
+    "ma_pt": "200",
+    "ten": "Xét tuyển theo kết quả học tập THPT (học bạ)",
+    "mo_ta": "ĐXT = Điểm Môn 1 + Môn 2 + Môn 3 + Điểm ưu tiên. Dựa vào tổ hợp 3 môn cả năm lớp 12."
+  },
+  {
+    "ma_pt": "407",
+    "ten": "Xét tuyển kết hợp điểm thi THPT 2025 với kết quả học tập THPT (học bạ)",
+    "mo_ta": "ĐXT = Điểm Môn 1 + Môn 2 + Môn 3 + Điểm ưu tiên. Kết hợp điểm thi THPT và học bạ."
+  },
+  {
+    "ma_pt": "409",
+    "ten": "Xét tuyển kết hợp điểm thi THPT với chứng chỉ quốc tế",
+    "mo_ta": "ĐXT = Điểm Môn 1 + Môn 2 + Môn 3 + Điểm ưu tiên. Sử dụng chứng chỉ quốc tế kết hợp điểm thi THPT."
+  },
+  {
+    "ma_pt": "410",
+    "ten": "Xét tuyển học bạ kết hợp với chứng chỉ quốc tế",
+    "mo_ta": "ĐXT = Điểm Môn 1 + Môn 2 + Môn 3 + Điểm ưu tiên. Sử dụng chứng chỉ quốc tế kết hợp học bạ."
+  },
+  {
+    "ma_pt": "402",
+    "ten": "Xét tuyển theo kết quả kỳ thi đánh giá năng lực của các trường ĐH",
+    "mo_ta": "Áp dụng kết quả từ: Đại học Quốc gia TP.HCM, Đại học Cần Thơ và các trường đại học khác tổ chức."
+  },
+  {
+    "ma_pt": "417",
+    "ten": "Sử dụng kết quả kỳ thi V-SAT do đơn vị khác tổ chức",
+    "mo_ta": "Xét tuyển dựa trên kết quả thi V-SAT."
+  },
+  {
+    "ma_pt": "411",
+    "ten": "Xét tuyển thí sinh tốt nghiệp THPT nước ngoài",
+    "mo_ta": "Dành cho thí sinh tốt nghiệp THPT tại nước ngoài."
+  }
+]
