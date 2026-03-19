@@ -4,6 +4,8 @@ uvicorn[standard]==0.24.0
 python-dotenv==1.0.0
 pydantic==2.5.0
 neo4j==5.14.1
+# Gemini (embeddings.py, llm_client.py, intent_classifier.py)
+google-generativeai>=0.8.0
 openai==1.6.1
 langchain==0.1.0
 langchain-openai==0.0.2
