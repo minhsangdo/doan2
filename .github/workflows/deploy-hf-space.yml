@@ -22,17 +22,30 @@ jobs:
           git config --global user.email "actions@github.com"
           git config --global user.name "github-actions"
 
-          # Clone Space repo
+          # 1) Clone Space repo
           git clone "https://oauth2:${HF_TOKEN}@huggingface.co/spaces/minhsangdo/dnc-admission-chatbot" hf-space
 
-          # Sync source code to Space
-          # --exclude "hf-space" tránh copy đệ quy
-          # code 24 của rsync là warning "file vanished", cho phép bỏ qua
+          # 2) Sync code (exclude heavy/binary/raw files)
           rsync -av --delete \
             --exclude ".git" \
             --exclude "hf-space" \
+            --exclude ".github" \
+            --exclude "node_modules" \
+            --exclude "__pycache__" \
+            --exclude "*.pyc" \
+            --exclude "*.log" \
+            --exclude ".env" \
+            --exclude ".venv" \
+            --exclude "venv" \
+            --exclude "data/raw/**" \
+            --exclude "*.pdf" \
+            --exclude "*.docx" \
+            --exclude "*.pptx" \
+            --exclude "*.zip" \
+            --exclude "*.rar" \
             ./ hf-space/ || test $? -eq 24
 
+          # 3) Commit & push
           cd hf-space
           git add .
           git commit -m "Auto deploy from GitHub Actions" || echo "No changes to commit"
