@@ -4,6 +4,18 @@
 
 ---
 
+## Tổng quan
+| Thành phần | Công nghệ | Mô tả |
+|------------|-----------|--------|
+| **Frontend** | React.js + Vite + Tailwind CSS | Giao diện chat, markdown, xác thực, lịch sử, ngành quan tâm, phản hồi, nhập giọng nói, Text-to-Speech |
+| **Backend** | FastAPI (Python 3.11) | API, JWT, Graph RAG, logic hỏi đáp |
+| **CSDL quan hệ** | SQLite `chat_history.db` | Người dùng, phiên chat, tin nhắn, ngành quan tâm, phản hồi |
+| **CSDL đồ thị** | Neo4j 5.x | Tri thức tuyển sinh phục vụ Graph RAG |
+| **AI** | Gemini API (LLM + embeddings) | Phân loại ý định, truy xuất ngữ cảnh, sinh câu trả lời dựa trên context |
+
+## Hình ảnh và sơ đồ
+Các sơ đồ (Kiến trúc, Use Case, ERD/DFD, Knowledge Graph) được vẽ bằng `draw.io`. Nếu bạn đã export ảnh (PNG/SVG) từ các file trong `docs/`, có thể nhúng trực tiếp vào README để hiển thị trên GitHub.
+
 ## 🏗️ Kiến trúc hệ thống
 
 Hệ thống được thiết kế theo mô hình Client-Server kết hợp với Knowledge Graph và LLM:
@@ -14,7 +26,7 @@ Hệ thống được thiết kế theo mô hình Client-Server kết hợp vớ
 | **Backend** | FastAPI (Python 3.11) | API, JWT, Graph RAG, logic hỏi đáp |
 | **Database (RDBMS)** | SQLite `chat_history.db` | Người dùng, phiên chat, tin nhắn, ngành quan tâm, phản hồi |
 | **Graph DB** | Neo4j 5.x | Entities, Relationships, Embeddings cho Graph RAG |
-| **AI** | OpenAI GPT-4o, Text-Embedding-3-Small, LangChain | Phân loại ý định, embedding, tổng hợp câu trả lời |
+| **AI** | Gemini API (LLM + embeddings) | Phân loại ý định, embedding, truy xuất ngữ cảnh từ Neo4j, tổng hợp câu trả lời |
 
 ---
 
@@ -90,7 +102,7 @@ Vector index: **Nganh.embedding** (1536 chiều, cosine) dùng cho similarity se
 
 ---
 
-## 🔄 Luồng dữ liệu
+## 🔄 Luồng xử lý chính
 
 ### 1. Chuẩn bị dữ liệu (Offline)
 
@@ -102,12 +114,26 @@ Vector index: **Nganh.embedding** (1536 chiều, cosine) dùng cho similarity se
 1. User gửi câu hỏi → POST `/api/chat/`.
 2. Backend: phân loại ý định (LLM) — gồm **hoc_bong** khi hỏi về học bổng.
 3. Embedding câu hỏi (nếu cần), vector search + graph traversal trên Neo4j; với intent **hoc_bong** thì lấy toàn bộ node HocBong.
-4. Xây dựng context (Graph RAG) → GPT-4o sinh câu trả lời + gợi ý câu hỏi.
+4. Xây dựng context (Graph RAG) → Gemini sinh câu trả lời + gợi ý câu hỏi.
 5. Lưu tin nhắn vào SQLite, trả response (kèm `bot_message_id` cho phản hồi).
 
 ---
 
-## 🛠️ Chức năng hệ thống
+## Tiến độ dự án
+
+### Đã hoàn thành ở mức sử dụng được
+- Graph RAG pipeline gồm: phân loại ý định, tạo embedding khi cần, truy xuất context từ Neo4j (vector search + graph traversal) và sinh câu trả lời bằng LLM.
+- Tích hợp intent `hoc_bong` để truy xuất danh sách học bổng từ Knowledge Graph.
+- Quản lý người dùng: đăng ký, đăng nhập/đăng xuất, quên mật khẩu, cập nhật hồ sơ cơ bản phục vụ tư vấn cá nhân hóa.
+- Lưu lịch sử hội thoại theo phiên và quản lý tin nhắn trong SQLite.
+- Lưu ngành quan tâm (favorites) và thu thập phản hồi (feedback) cho câu trả lời của chatbot.
+- Nhập giọng nói (Web Speech API) và nghe đọc câu trả lời (TTS).
+
+### Đang tiếp tục hoàn thiện
+- Tối ưu chất lượng truy xuất ngữ cảnh và ràng buộc sinh câu trả lời theo `sources`.
+- Hoàn thiện phần quản trị (thống kê/rebuild) và mở rộng khả năng cập nhật dữ liệu tri thức theo nhu cầu.
+
+## Tính năng đã có
 
 ### 1. Quản lý người dùng & xác thực
 
@@ -151,6 +177,25 @@ Vector index: **Nganh.embedding** (1536 chiều, cosine) dùng cho similarity se
 - Thống kê Neo4j, rebuild graph, xem lịch sử chat, quản lý ngành (tùy cấu hình).
 
 ---
+
+## Kiến trúc hiện tại
+```text
+Thí sinh/Người dùng
+      |
+      v
+Frontend (React/Vite)
+      |
+      v  (HTTP /api/chat/)
+Backend (FastAPI)
+      |
+      +--> Intent classifier (Gemini)
+      +--> Embedding câu hỏi (Gemini embeddings)
+      +--> Truy vấn Neo4j (vector_search + graph traversal)
+      +--> Sinh câu trả lời (Gemini) dựa trên context
+      +--> Lưu dữ liệu hội thoại vào SQLite
+      v
+Trả lời về Frontend (answer + sources + suggested_questions)
+```
 
 ## 📁 Cấu trúc thư mục
 
@@ -202,7 +247,7 @@ Dữ liệu trích từ văn bản chính thức DNC:
 - Docker, Docker Compose  
 - Python 3.11+  
 - Node.js v18+  
-- OpenAI API Key  
+- Gemini API Key (code đang đọc key ở biến `OPENAI_API_KEY` trong file `.env`)
 
 ### B1. Neo4j
 
@@ -214,7 +259,10 @@ docker-compose up -d neo4j
 
 ```bash
 cp .env.example .env
-# Sửa .env: OPENAI_API_KEY, MAIL_* (nếu dùng quên mật khẩu)
+# Gợi ý chỉnh trong file .env:
+# - NÊN dùng Neo4j single instance: đặt NEO4J_URI=bolt://127.0.0.1:7687
+# - Gán Gemini API key vào OPENAI_API_KEY (do code đang dùng chung biến tên này)
+# - MAIL_* (nếu dùng tính năng quên mật khẩu qua email)
 
 cd backend
 pip install -r requirements.txt
@@ -246,9 +294,18 @@ Truy cập: **http://localhost:5173/**
 
 ---
 
-## 👤 Tech Credits
+## Công nghệ sử dụng
+| Công nghệ | Vai trò |
+|---|---|
+| React.js + Vite + Tailwind CSS | Giao diện chat và trải nghiệm người dùng |
+| FastAPI + Uvicorn | Backend API, xử lý nghiệp vụ chatbot |
+| SQLite | Lưu user, session, tin nhắn, favorites và feedback |
+| Neo4j | Knowledge Graph phục vụ Graph RAG |
+| Gemini API (LLM + embeddings) | Phân loại ý định, embedding, sinh câu trả lời |
+| draw.io | Vẽ sơ đồ kiến trúc/DFD/Use Case/ERD |
 
-| | |
+## Tác giả
+| Nội dung | Thông tin |
 |---|---|
 | **Sinh viên** | DoMinhSang |
 | **Khách hàng** | Đại Học Nam Cần Thơ (DNC) |
