@@ -14,4 +14,7 @@ data/raw
 **/*.pdf
 **/*.png
 **/*.jpg
+**/*.jpeg
+**/*.webp
+**/*.gif
 **/*.zip

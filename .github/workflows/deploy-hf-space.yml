@@ -30,6 +30,11 @@ jobs:
           cp -r backend hf-space/
           cp -r frontend hf-space/
           rm -rf hf-space/frontend/node_modules
+          # HF từ chối push git nếu có file nhị phân (png/jpg/pdf...) — giữ SVG/text
+          find hf-space/frontend/public -type f \( \
+            -iname '*.png' -o -iname '*.jpg' -o -iname '*.jpeg' -o \
+            -iname '*.webp' -o -iname '*.gif' -o -iname '*.ico' -o -iname '*.pdf' \
+          \) -delete 2>/dev/null || true
           cp -r data/processed/. hf-space/data/processed/
           cp -r scripts hf-space/
           cp Dockerfile .dockerignore hf-space/

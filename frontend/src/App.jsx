@@ -740,10 +740,9 @@ export default function App() {
           <div className="w-20 h-20 rounded-2xl bg-white shadow-sm flex items-center justify-center p-2 mb-4 border border-slate-100 relative group overflow-hidden">
             <div className="absolute inset-0 bg-gradient-to-tr from-blue-50 to-amber-50 opacity-0 group-hover:opacity-100 transition-opacity"></div>
             <img 
-              src="/dnc_logo.png" 
+              src="https://nctu.edu.vn/Uploads/News/images/DNC_C.png" 
               alt="DNC Logo" 
               className="w-full h-full object-contain relative z-10 drop-shadow-sm"
-              onError={(e) => { e.target.src = "https://nctu.edu.vn/Uploads/News/images/DNC_C.png" }}
             />
           </div>
           <h1 className="font-bold text-lg text-slate-800 tracking-tight text-center">Chatbox hỗ trợ tuyển sinh</h1>
