@@ -2,7 +2,8 @@ name: Deploy to Hugging Face Space
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
+  workflow_dispatch:
 
 jobs:
   deploy:
@@ -16,11 +17,22 @@ jobs:
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
         run: |
+          set -e
+
           git config --global user.email "actions@github.com"
           git config --global user.name "github-actions"
 
+          # Clone Space repo
           git clone "https://oauth2:${HF_TOKEN}@huggingface.co/spaces/minhsangdo/dnc-admission-chatbot" hf-space
-          rsync -av --delete --exclude ".git" ./ hf-space/
+
+          # Sync source code to Space
+          # --exclude "hf-space" tránh copy đệ quy
+          # code 24 của rsync là warning "file vanished", cho phép bỏ qua
+          rsync -av --delete \
+            --exclude ".git" \
+            --exclude "hf-space" \
+            ./ hf-space/ || test $? -eq 24
+
           cd hf-space
           git add .
           git commit -m "Auto deploy from GitHub Actions" || echo "No changes to commit"
