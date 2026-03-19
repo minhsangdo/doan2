@@ -1,5 +1,9 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+import logging
+from urllib.parse import urlparse
+
+from fastapi import APIRouter, Depends, HTTPException, Request
 from sqlalchemy.orm import Session
+from sqlalchemy import func
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from typing import List
 
@@ -11,13 +15,31 @@ from models.auth_schemas import (
     ForgotPasswordRequest, ResetPasswordRequest, ProfileUpdateRequest,
     FavoriteMajorAdd, FavoriteMajorResponse
 )
-from core.email_utils import send_reset_email
+from core.email_utils import send_reset_email, is_email_sending_configured
 import secrets
 from datetime import datetime, timedelta
 
 
+logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/auth", tags=["Authentication"])
+
+
+def _resolve_frontend_base(request: Request) -> str:
+    """URL gốc của frontend (link trong email). Ưu tiên FRONTEND_URL, sau đó Origin/Referer (ổn cho HF Space)."""
+    import os
+    explicit = (os.environ.get("FRONTEND_URL") or "").strip().rstrip("/")
+    if explicit:
+        return explicit
+    origin = (request.headers.get("origin") or "").strip().rstrip("/")
+    if origin:
+        return origin
+    referer = request.headers.get("referer") or ""
+    if referer:
+        parsed = urlparse(referer)
+        if parsed.scheme and parsed.netloc:
+            return f"{parsed.scheme}://{parsed.netloc}".rstrip("/")
+    return "http://localhost:5173"
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/auth/login")
 
@@ -41,14 +63,15 @@ def register_user(user: UserCreate, db: Session = Depends(get_db)):
     db_user = db.query(User).filter(User.username == user.username).first()
     if db_user:
         raise HTTPException(status_code=400, detail="Username already registered")
-        
-    if user.email:
-        db_email = db.query(User).filter(User.email == user.email).first()
+
+    email_norm = (user.email or "").strip().lower() or None
+    if email_norm:
+        db_email = db.query(User).filter(func.lower(User.email) == email_norm).first()
         if db_email:
             raise HTTPException(status_code=400, detail="Email already registered")
-    
+
     hashed_password = get_password_hash(user.password)
-    new_user = User(username=user.username, email=user.email, hashed_password=hashed_password)
+    new_user = User(username=user.username, email=email_norm, hashed_password=hashed_password)
     db.add(new_user)
     db.commit()
     db.refresh(new_user)
@@ -90,26 +113,63 @@ def get_user_chat_history(current_user: User = Depends(get_current_user), db: Se
     return history
 
 @router.post("/forgot-password")
-def forgot_password(request: ForgotPasswordRequest, db: Session = Depends(get_db)):
-    user = db.query(User).filter(User.email == request.email).first()
+def forgot_password(
+    body: ForgotPasswordRequest,
+    request: Request,
+    db: Session = Depends(get_db),
+):
+    if not is_smtp_configured():
+        raise HTTPException(
+            status_code=503,
+            detail=(
+                "Hệ thống chưa cấu hình gửi email. "
+                "Quản trị viên cần đặt biến môi trường MAIL_USERNAME và MAIL_PASSWORD (SMTP)."
+            ),
+        )
+
+    email_norm = (body.email or "").strip().lower()
+    if not email_norm:
+        return {
+            "message": "Nếu email tồn tại trong hệ thống, bạn sẽ nhận được một đường link đặt lại mật khẩu."
+        }
+
+    user = db.query(User).filter(func.lower(User.email) == email_norm).first()
     if not user:
-        return {"message": "Nếu email tồn tại trong hệ thống, bạn sẽ nhận được một đường link đặt lại mật khẩu."}
-    
+        return {
+            "message": "Nếu email tồn tại trong hệ thống, bạn sẽ nhận được một đường link đặt lại mật khẩu."
+        }
+
+    if not user.email:
+        return {
+            "message": "Nếu email tồn tại trong hệ thống, bạn sẽ nhận được một đường link đặt lại mật khẩu."
+        }
+
     reset_token = secrets.token_urlsafe(32)
     user.reset_token = reset_token
     user.reset_token_expire = datetime.utcnow() + timedelta(hours=1)
     db.commit()
-    
-    import os
-    frontend_url = os.environ.get("FRONTEND_URL", "http://localhost:5173")
-    reset_link = f"{frontend_url}?reset_token={reset_token}"
-    
+
+    base = _resolve_frontend_base(request)
+    reset_link = f"{base}/?reset_token={reset_token}"
+
     try:
         send_reset_email(user.email, reset_link)
-    except Exception as e:
-        raise HTTPException(status_code=500, detail="Lỗi khi gửi email. Vui lòng thử lại sau.")
-        
-    return {"message": "Nếu email tồn tại trong hệ thống, bạn sẽ nhận được một đường link đặt lại mật khẩu."}
+    except Exception:
+        user.reset_token = None
+        user.reset_token_expire = None
+        db.commit()
+        logger.exception("Gửi email đặt lại mật khẩu thất bại; đã hủy token.")
+        raise HTTPException(
+            status_code=500,
+            detail=(
+                "Lỗi khi gửi email. Trên Hugging Face hãy dùng Resend (RESEND_API_KEY); "
+                "SMTP Gmail thường không hoạt động trong Space."
+            ),
+        )
+
+    return {
+        "message": "Nếu email tồn tại trong hệ thống, bạn sẽ nhận được một đường link đặt lại mật khẩu."
+    }
 
 @router.post("/reset-password")
 def reset_password(request: ResetPasswordRequest, db: Session = Depends(get_db)):
@@ -117,7 +177,7 @@ def reset_password(request: ResetPasswordRequest, db: Session = Depends(get_db))
     if not user:
         raise HTTPException(status_code=400, detail="Token không hợp lệ hoặc đã hết hạn.")
         
-    if user.reset_token_expire < datetime.utcnow():
+    if user.reset_token_expire is None or user.reset_token_expire < datetime.utcnow():
         raise HTTPException(status_code=400, detail="Token không hợp lệ hoặc đã hết hạn.")
         
     user.hashed_password = get_password_hash(request.new_password)

@@ -1,24 +1,34 @@
+import os
+import ssl
+import logging
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
-import os
-import ssl
 
-def send_reset_email(to_email: str, reset_link: str):
-    smtp_server = os.environ.get("MAIL_SERVER", "smtp.gmail.com")
-    port = int(os.environ.get("MAIL_PORT", 587))
-    sender_email = os.environ.get("MAIL_USERNAME")
-    password = os.environ.get("MAIL_PASSWORD", "yqsr kynw tzqh jbyr")
-    
-    if not sender_email:
-        print("Cảnh báo: MAIL_USERNAME chưa được cấu hình!")
-        sender_email = "your_email@gmail.com" # Placeholder
+import httpx
 
-    message = MIMEMultipart("alternative")
-    message["Subject"] = "Yêu cầu khôi phục mật khẩu - DNC Chatbot"
-    message["From"] = sender_email
-    message["To"] = to_email
+logger = logging.getLogger(__name__)
 
+RESET_SUBJECT = "Yêu cầu khôi phục mật khẩu - DNC Chatbot"
+
+
+def is_smtp_configured() -> bool:
+    """Gmail SMTP: MAIL_USERNAME + MAIL_PASSWORD."""
+    u = (os.environ.get("MAIL_USERNAME") or "").strip()
+    p = (os.environ.get("MAIL_PASSWORD") or "").strip()
+    return bool(u and p)
+
+
+def is_resend_configured() -> bool:
+    """Gửi qua HTTPS — chạy được trên Hugging Face Space (SMTP thường bị chặn/treo)."""
+    return bool((os.environ.get("RESEND_API_KEY") or "").strip())
+
+
+def is_email_sending_configured() -> bool:
+    return is_resend_configured() or is_smtp_configured()
+
+
+def _build_reset_bodies(reset_link: str) -> tuple[str, str]:
     text = f"""\
 Xin chào,
 Bạn vừa yêu cầu khôi phục mật khẩu cho tài khoản tại DNC Chatbot.
@@ -27,7 +37,6 @@ Vui lòng truy cập đường link sau để đặt lại mật khẩu của b�
 
 Nếu bạn không yêu cầu, vui lòng bỏ qua email này.
 """
-    
     html = f"""\
     <html>
       <body>
@@ -45,22 +54,85 @@ Nếu bạn không yêu cầu, vui lòng bỏ qua email này.
       </body>
     </html>
     """
+    return text, html
 
-    part1 = MIMEText(text, "plain")
-    part2 = MIMEText(html, "html")
+
+def _send_via_resend(to_email: str, subject: str, html: str, text: str, api_key: str) -> None:
+    """
+    https://resend.com/docs/api-reference/emails/send-email
+    Trên HF Space nên dùng Resend thay SMTP (cổng 587 tới Gmail thường timeout).
+    """
+    from_addr = (os.environ.get("RESEND_FROM") or "DNC Chatbot <onboarding@resend.dev>").strip()
+    r = httpx.post(
+        "https://api.resend.com/emails",
+        headers={
+            "Authorization": f"Bearer {api_key}",
+            "Content-Type": "application/json",
+        },
+        json={
+            "from": from_addr,
+            "to": [to_email],
+            "subject": subject,
+            "html": html,
+            "text": text,
+        },
+        timeout=25.0,
+    )
+    if r.status_code >= 400:
+        logger.error("Resend API %s: %s", r.status_code, r.text)
+    r.raise_for_status()
+
+
+def send_reset_email(to_email: str, reset_link: str) -> None:
+    """
+    Ưu tiên RESEND_API_KEY (HTTPS). Nếu không có thì dùng SMTP Gmail.
+    """
+    text, html = _build_reset_bodies(reset_link)
+
+    resend_key = (os.environ.get("RESEND_API_KEY") or "").strip()
+    if resend_key:
+        _send_via_resend(to_email, RESET_SUBJECT, html, text, resend_key)
+        logger.info("Đã gửi email đặt lại mật khẩu (Resend) tới %s", to_email)
+        return
+
+    if not is_smtp_configured():
+        raise RuntimeError("SMTP_NOT_CONFIGURED")
+
+    smtp_server = os.environ.get("MAIL_SERVER", "smtp.gmail.com").strip()
+    port = int(os.environ.get("MAIL_PORT", "587"))
+    sender_email = os.environ.get("MAIL_USERNAME", "").strip()
+    password = os.environ.get("MAIL_PASSWORD", "").strip()
+
+    message = MIMEMultipart("alternative")
+    message["Subject"] = RESET_SUBJECT
+    message["From"] = sender_email
+    message["To"] = to_email
+
+    part1 = MIMEText(text, "plain", "utf-8")
+    part2 = MIMEText(html, "html", "utf-8")
     message.attach(part1)
     message.attach(part2)
 
     context = ssl.create_default_context()
+    server = None
     try:
-        server = smtplib.SMTP(smtp_server, port)
+        # Timeout ngắn để không treo UI quá lâu khi mạng chặn SMTP
+        server = smtplib.SMTP(smtp_server, port, timeout=15)
         server.ehlo()
         server.starttls(context=context)
         server.ehlo()
         server.login(sender_email, password)
         server.sendmail(sender_email, to_email, message.as_string())
+        logger.info("Đã gửi email đặt lại mật khẩu (SMTP) tới %s", to_email)
     except Exception as e:
-        print(f"Error sending email: {e}")
-        raise e
+        logger.exception("Lỗi gửi email SMTP: %s", e)
+        raise
     finally:
-        server.quit()
+        if server is not None:
+            try:
+                server.quit()
+            except Exception:
+                try:
+                    server.close()
+                except Exception:
+                    pass

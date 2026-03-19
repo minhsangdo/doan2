@@ -300,7 +300,8 @@ Truy cập: **http://localhost:5173/**
 ## ☁️ Hugging Face Space (Docker)
 
 - **Dockerfile** ở thư mục gốc: build React (`npm run build`) + chạy FastAPI trên cổng **7860**, phục vụ giao diện từ `/` và API từ `/api`.
-- Trên Space: **Settings → Secrets** thêm `NEO4J_URI`, `NEO4J_USER`, `NEO4J_PASSWORD`, `OPENAI_API_KEY` (Gemini). Có thể thêm `FRONTEND_URL` = URL Space (hoặc để mặc định CORS `*`).
+- Trên Space: **Settings → Secrets** thêm `NEO4J_URI`, `NEO4J_USER`, `NEO4J_PASSWORD`, `OPENAI_API_KEY` (Gemini), `FRONTEND_URL` = URL Space.
+- **Quên mật khẩu trên HF:** SMTP Gmail (`MAIL_*`) thường **bị treo/chặn** trong Space. Hãy dùng **[Resend](https://resend.com)** (miễn phí): tạo API key → Secret `RESEND_API_KEY`. Tuỳ chọn `RESEND_FROM` (mặc định `DNC Chatbot <onboarding@resend.dev>`; gửi đại trà cần verify domain trên Resend).
 - **GitHub Actions**: workflow `.github/workflows/deploy-hf-space.yml` chỉ copy whitelist (`backend/`, `frontend/`, `data/processed/`, `scripts/`, `Dockerfile`, `.dockerignore`, `deploy/hf-README.md` → `README.md` trên Space). Cần secret repo **`HF_TOKEN`** (token Hugging Face có quyền ghi Space).
 
 ---

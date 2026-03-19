@@ -235,12 +235,21 @@ export default function App() {
     setAuthError('');
     setAuthSuccess('');
     try {
-      const res = await axios.post(`${API_URL}/auth/forgot-password`, {
-        email: authForm.email
-      });
+      const res = await axios.post(
+        `${API_URL}/auth/forgot-password`,
+        { email: authForm.email },
+        { timeout: 40000 }
+      );
       setAuthSuccess(res.data.message);
     } catch (err) {
-      setAuthError(err.response?.data?.detail || 'Lỗi khi gửi yêu cầu. Vui lòng thử lại.');
+      const d = err.response?.data?.detail;
+      const msg =
+        typeof d === 'string'
+          ? d
+          : Array.isArray(d)
+            ? d.map((x) => x.msg || JSON.stringify(x)).join(' ')
+            : 'Lỗi khi gửi yêu cầu. Vui lòng thử lại.';
+      setAuthError(msg);
     } finally {
       setIsAuthLoading(false);
     }
@@ -268,7 +277,14 @@ export default function App() {
          setAuthSuccess('');
       }, 3000);
     } catch (err) {
-      setAuthError(err.response?.data?.detail || 'Đặt lại mật khẩu thất bại.');
+      const d = err.response?.data?.detail;
+      const msg =
+        typeof d === 'string'
+          ? d
+          : Array.isArray(d)
+            ? d.map((x) => x.msg || JSON.stringify(x)).join(' ')
+            : 'Đặt lại mật khẩu thất bại.';
+      setAuthError(msg);
     } finally {
       setIsAuthLoading(false);
     }
@@ -943,7 +959,7 @@ export default function App() {
             </div>
             <div className="hidden lg:flex items-center gap-2 text-sm font-medium text-slate-500">
               <GraduationCap size={18} className="text-blue-500" />
-              Kỳ tuyển sinh Đại học chính quy 2025
+              Kỳ tuyển sinh Đại học chính quy 2026
             </div>
           </div>
           
