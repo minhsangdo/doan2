@@ -41,6 +41,8 @@ class GraphBuilder:
                 nganh_hoc = json.load(f)
             with open(os.path.join(self.data_dir, "diem_chuan.json"), "r", encoding="utf-8") as f:
                 diem_chuan = json.load(f)
+            hoc_bong_path = os.path.join(self.data_dir, "hoc_bong.json")
+            hoc_bong = json.load(open(hoc_bong_path, "r", encoding="utf-8")) if os.path.exists(hoc_bong_path) else []
         except Exception as e:
             logger.error(f"Error reading JSON datasets: {e}")
             raise e
@@ -54,6 +56,12 @@ class GraphBuilder:
         logger.info(f"Creating {len(tohop_mon)} Tổ hợp môn nodes...")
         for t in tohop_mon:
             self.db.create_tohop_mon(t)
+
+        # 4b. Create HocBong (scholarship) nodes
+        if hoc_bong:
+            logger.info(f"Creating {len(hoc_bong)} HocBong nodes...")
+            for hb in hoc_bong:
+                self.db.create_hoc_bong(hb)
             
         # 5. Create NhomNganh Nodes
         groups = set([ng.get("nhom") for ng in nganh_hoc if ng.get("nhom")])

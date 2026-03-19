@@ -1,0 +1,66 @@
+[
+  {
+    "ma_hb": "HB01",
+    "ten": "Học bổng 20.000.000 đồng (Thủ khoa đầu vào)",
+    "mo_ta": "Học bổng hỗ trợ trị giá lên đến 20.000.000 đồng dành cho Thủ khoa đầu vào của Trường.",
+    "dieu_kien": "Thủ khoa đầu vào của Trường có điểm xét học bạ và điểm thi THPT hàng năm cao nhất.",
+    "gia_tri": "20.000.000 đồng/suất",
+    "doi_tuong": "Tân sinh viên - Thủ khoa đầu vào DNC"
+  },
+  {
+    "ma_hb": "HB02",
+    "ten": "Học bổng 40% học phí (Nhóm ngành thu hút)",
+    "mo_ta": "Học bổng năm 2025 trị giá 40% học phí Học kì I cho thí sinh hoàn thành thủ tục sớm vào các ngành thu hút.",
+    "dieu_kien": "25 thí sinh xét tuyển và hoàn thành thủ tục sớm vào DNC đối với nhóm ngành thu hút. Năm 2025 gồm: Y học dự phòng, Công nghệ kỹ thuật bán dẫn, Kỹ thuật y sinh, Công nghệ kỹ thuật hóa học, Mạng máy tính và truyền thông dữ liệu, Kinh tế số, Quản lý công nghiệp, Quản lý bệnh viện, Trí tuệ nhân tạo, Quản lý xây dựng, Kỹ thuật xây dựng công trình giao thông.",
+    "gia_tri": "40% học phí Học kì I",
+    "doi_tuong": "Tân sinh viên - 25 thí sinh nhóm ngành thu hút hoàn thành thủ tục sớm"
+  },
+  {
+    "ma_hb": "HB03",
+    "ten": "Học bổng 30% học phí (Hoàn thành thủ tục sớm)",
+    "mo_ta": "Học bổng năm 2025 trị giá 30% học phí Học kì I cho thí sinh hoàn thành thủ tục sớm.",
+    "dieu_kien": "Thí sinh xét tuyển và hoàn thành thủ tục sớm vào DNC các ngành đào tạo chương trình Đại học chính quy.",
+    "gia_tri": "30% học phí Học kì I",
+    "doi_tuong": "Tân sinh viên - Thí sinh hoàn thành thủ tục sớm, ngành Đại học chính quy"
+  },
+  {
+    "ma_hb": "HB04",
+    "ten": "Học bổng 2.000.000 đồng (Hoàn cảnh khó khăn)",
+    "mo_ta": "Học bổng hỗ trợ sinh viên có hoàn cảnh khó khăn được xác nhận.",
+    "dieu_kien": "Áp dụng đối với sinh viên có hoàn cảnh khó khăn được xác nhận.",
+    "gia_tri": "2.000.000 đồng/suất (năm 2024)",
+    "doi_tuong": "Sinh viên Đại học chính quy có hoàn cảnh khó khăn"
+  },
+  {
+    "ma_hb": "HB05",
+    "ten": "Học bổng 2.500.000 đồng (Học tập xuất sắc và rèn luyện tốt)",
+    "mo_ta": "Học bổng ghi nhận thành tích học tập xuất sắc và rèn luyện tốt trở lên.",
+    "dieu_kien": "Áp dụng đối với sinh viên có thành tích học tập xuất sắc và rèn luyện tốt trở lên.",
+    "gia_tri": "2.500.000 đồng/suất (năm 2024)",
+    "doi_tuong": "Sinh viên Đại học chính quy"
+  },
+  {
+    "ma_hb": "HB06",
+    "ten": "Học bổng Hội khuyến học / Nhà tài trợ / Doanh nghiệp",
+    "mo_ta": "Học bổng từ Hội khuyến học, Nhà tài trợ, Đối tác, Doanh nghiệp dành cho sinh viên.",
+    "dieu_kien": "Áp dụng đối với sinh viên thuộc các đối tượng được nhận học bổng của Hội khuyến học, Nhà tài trợ, Đối tác, Doanh nghiệp (theo tiêu chí từng đơn vị).",
+    "gia_tri": "2.000.000 - 3.000.000 đồng/suất",
+    "doi_tuong": "Sinh viên đáp ứng tiêu chí của Hội khuyến học, Nhà tài trợ, Đối tác, Doanh nghiệp"
+  },
+  {
+    "ma_hb": "HB07",
+    "ten": "Học bổng 2.500.000 đồng (Tốt nghiệp xuất sắc)",
+    "mo_ta": "Học bổng dành cho sinh viên tốt nghiệp xếp loại xuất sắc.",
+    "dieu_kien": "Áp dụng đối với sinh viên tốt nghiệp xếp loại xuất sắc.",
+    "gia_tri": "2.500.000 đồng/suất (năm 2024)",
+    "doi_tuong": "Sinh viên tốt nghiệp xếp loại xuất sắc"
+  },
+  {
+    "ma_hb": "HB08",
+    "ten": "Thông tin liên hệ học bổng và sinh viên",
+    "mo_ta": "Liên hệ Phòng Công tác chính trị & Quản lý sinh viên hoặc Phòng Tư vấn tuyển sinh để biết thêm chi tiết về học bổng và thủ tục.",
+    "dieu_kien": "",
+    "gia_tri": "",
+    "doi_tuong": "Phòng Công tác chính trị & QLSV: Văn phòng C2-03, ĐT 02923 798 444, phongqlhssv@nctu.edu.vn. Phòng Tư vấn tuyển sinh: C2-08, Hotline 0939 257 838, 02923 798 168 - 798 222 - 798 333, tuyensinhdnc@nctu.edu.vn"
+  }
+]

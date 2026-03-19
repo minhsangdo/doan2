@@ -40,8 +40,8 @@ Hệ thống sử dụng **5 bảng** trong file `chat_history.db`, liên kết 
          │ 1:N                                    └──────────┬──────────┘
          ▼                                                   │
 ┌──────────────────┐                                        │
-│ chat_messages     │◄───────────────────────────────────────┘
-│ session_id (FK)   │
+│ chat_messages    │◄───────────────────────────────────────┘
+│ session_id (FK)  │
 └──────────────────┘
 ```
 
@@ -66,15 +66,27 @@ Hệ thống sử dụng **5 bảng** trong file `chat_history.db`, liên kết 
 
 ## 🧠 Sơ đồ tri thức (Knowledge Graph – Neo4j)
 
-Mô hình đồ thị trong Neo4j (không phải bảng SQL):
+Mô hình đồ thị trong Neo4j (labels và quan hệ thực tế trong code):
 
-- **Nodes**: `Program` (Ngành học), `AdmissionMethod` (Phương thức xét tuyển), `AdmissionCriteria` (Điểm chuẩn), `MajorInfo` (Tổ hợp môn).
-- **Relationships**:
-  - `(Program)-[:HAS_CRITERIA]->(AdmissionCriteria)`
-  - `(Program)-[:HAS_INFO]->(MajorInfo)`
-  - `(AdmissionMethod)-[:APPLIES_TO]->(Program)`
+### Node types (labels)
 
-Mỗi node có `text_content` và vector embedding cho similarity search.
+| Label | Mô tả | Số lượng (sau seed mẫu) |
+|-------|--------|-------------------------|
+| **Nganh** | Ngành đào tạo (ma_nganh, ten, nhom, mo_ta); có vector embedding | 45 |
+| **DiemChuan** | Điểm chuẩn 2025 (THPT, học bạ, ĐGNL, V-SAT) theo từng ngành | 45 |
+| **TohopMon** | Tổ hợp môn xét tuyển (ma_tohop, ten, cac_mon) | 41 |
+| **PhuongThuc** | Phương thức xét tuyển (ma_pt, ten, mo_ta) | 9 |
+| **NhomNganh** | Nhóm ngành (Y-Duoc, KT-CN, ...) | 10 |
+| **HocBong** | Học bổng và chính sách hỗ trợ (ma_hb, ten, mo_ta, dieu_kien, gia_tri, doi_tuong) | 8 |
+
+### Relationships
+
+- `(Nganh)-[:HAS_SCORE]->(DiemChuan)`
+- `(Nganh)-[:USES_COMBO]->(TohopMon)`
+- `(Nganh)-[:BELONGS_TO]->(NhomNganh)`
+- `(Nganh)-[:ACCEPTS_METHOD]->(PhuongThuc)`
+
+Vector index: **Nganh.embedding** (1536 chiều, cosine) dùng cho similarity search khi tư vấn ngành/điểm chuẩn.
 
 ---
 
@@ -83,14 +95,15 @@ Mỗi node có `text_content` và vector embedding cho similarity search.
 ### 1. Chuẩn bị dữ liệu (Offline)
 
 1. Trích xuất dữ liệu từ PDF/DOCX → lưu JSON tại `data/processed/`.
-2. Chạy `scripts/seed_neo4j.py`: tạo nodes, relationships, embeddings và Vector Index trong Neo4j.
+2. Chạy **`python scripts/seed_neo4j.py`** (từ thư mục gốc): tạo nodes, relationships, embeddings và Vector Index trong Neo4j. Script đọc: `phuong_thuc.json`, `tohop_mon.json`, `nganh_hoc.json`, `diem_chuan.json`, `hoc_bong.json` (nếu có).
 
 ### 2. Hỏi đáp (Online)
 
 1. User gửi câu hỏi → POST `/api/chat/`.
-2. Backend: phân loại ý định (LLM), embedding câu hỏi, vector search + graph traversal trên Neo4j.
-3. Xây dựng context (Graph RAG) → GPT-4o sinh câu trả lời + gợi ý câu hỏi.
-4. Lưu tin nhắn vào SQLite, trả response (kèm `bot_message_id` cho phản hồi).
+2. Backend: phân loại ý định (LLM) — gồm **hoc_bong** khi hỏi về học bổng.
+3. Embedding câu hỏi (nếu cần), vector search + graph traversal trên Neo4j; với intent **hoc_bong** thì lấy toàn bộ node HocBong.
+4. Xây dựng context (Graph RAG) → GPT-4o sinh câu trả lời + gợi ý câu hỏi.
+5. Lưu tin nhắn vào SQLite, trả response (kèm `bot_message_id` cho phản hồi).
 
 ---
 
@@ -107,6 +120,7 @@ Mỗi node có `text_content` và vector embedding cho similarity search.
 - Tư vấn **45 ngành đào tạo**, mã ngành, tổ hợp môn.
 - Tra cứu **điểm chuẩn năm 2025** theo hình thức xét tuyển.
 - **9 phương thức xét tuyển**, thủ tục nhập học.
+- **Học bổng và chính sách hỗ trợ**: học bổng tân sinh viên (20 triệu, 40%, 30%), học bổng sinh viên chính quy (hoàn cảnh khó khăn, xuất sắc, tốt nghiệp xuất sắc, Hội khuyến học/doanh nghiệp), thông tin liên hệ Phòng QLSV & Tư vấn tuyển sinh.
 - **Gợi ý câu hỏi** sau mỗi câu trả lời.
 - **Nguồn tham chiếu (Sources)** hiển thị minh bạch từ Neo4j.
 
@@ -145,8 +159,8 @@ doan2_chatboxtuyensinh_DoMinhSang/
 ├── backend/                    # FastAPI
 │   ├── api/                   # Routes: chat, auth, admin
 │   ├── core/                  # Graph RAG, LLM, Neo4j, Security, DB
+│   ├── knowledge/             # graph_builder (đọc JSON, tạo Neo4j)
 │   ├── models/                # SQLAlchemy models, Pydantic schemas
-│   ├── scripts/               # seed_neo4j, data ingestion
 │   ├── main.py                # Entrypoint
 │   ├── migrate_db.py          # Migration SQLite (bảng + cột)
 │   └── chat_history.db        # SQLite (5 bảng)
@@ -156,7 +170,11 @@ doan2_chatboxtuyensinh_DoMinhSang/
 │   │   └── AdminDashboard.jsx
 │   └── public/
 ├── data/
-│   └── processed/             # diem_chuan.json, nganh_hoc.json, tohop_mon.json, phuong_thuc.json
+│   ├── raw/                   # PDF/DOCX nguồn (diem chuan, tuyen sinh, hoc bong...)
+│   └── processed/             # JSON: diem_chuan, nganh_hoc, tohop_mon, phuong_thuc, hoc_bong
+├── docs/                       # Hướng dẫn (vd: thêm dữ liệu học bổng)
+├── scripts/
+│   └── seed_neo4j.py          # Seed toàn bộ graph từ data/processed/
 ├── README.md
 └── docker-compose.yml         # Neo4j
 ```
@@ -167,11 +185,13 @@ doan2_chatboxtuyensinh_DoMinhSang/
 
 Dữ liệu trích từ văn bản chính thức DNC:
 
-- `Thong_bao_diem_chuan_2025_-_DNC-_22-8-2025.pdf`
-- `thong-tin-tuyen-sinh-dai-hoc-nam-can-tho-2025.pdf`
-- `ke_hoach_do_an_dnc_chatbot.docx`
+| Nguồn | Nội dung | File JSON (trong `data/processed/`) |
+|-------|----------|--------------------------------------|
+| Thông báo điểm chuẩn 2025, Thông tin tuyển sinh 2025, Kế hoạch đồ án | Ngành, điểm chuẩn, tổ hợp môn, phương thức | `diem_chuan.json`, `nganh_hoc.json`, `tohop_mon.json`, `phuong_thuc.json` |
+| **HỌC BỔNG ĐẠI HỌC NAM CẦN THƠ.pdf** | Học bổng tân sinh viên, sinh viên chính quy, liên hệ | `hoc_bong.json` |
 
-Kết quả: `diem_chuan.json`, `nganh_hoc.json`, `tohop_mon.json`, `phuong_thuc.json` trong `data/processed/`.
+- File PDF học bổng có thể đặt trong `data/raw/` (vd: `data/raw/HỌC BỔNG ĐẠI HỌC NAM CẦN THƠ.pdf`). Dữ liệu đã được trích và chuẩn hóa vào `hoc_bong.json` để seed Neo4j.
+- Hướng dẫn **thêm/sửa dữ liệu học bổng**: xem `docs/HUONG_DAN_THEM_DU_LIEU_HOC_BONG.md`.
 
 ---
 
@@ -190,7 +210,7 @@ Kết quả: `diem_chuan.json`, `nganh_hoc.json`, `tohop_mon.json`, `phuong_thuc
 docker-compose up -d neo4j
 ```
 
-### B2. Backend
+### B2. Backend và seed graph
 
 ```bash
 cp .env.example .env
@@ -199,7 +219,18 @@ cp .env.example .env
 cd backend
 pip install -r requirements.txt
 python migrate_db.py
+```
+
+Từ **thư mục gốc** project:
+
+```bash
 python scripts/seed_neo4j.py
+```
+
+Sau đó chạy backend:
+
+```bash
+cd backend
 uvicorn main:app --reload --port 8000
 ```
 
@@ -226,4 +257,4 @@ Truy cập: **http://localhost:5173/**
 
 ---
 
-*Chatbot có thể mắc lỗi do AI. Vui lòng đối chiếu với Đề án tuyển sinh chính thức năm 2025.*
+*Chatbot có thể mắc lỗi do AI. Vui lòng đối chiếu với Đề án tuyển sinh và văn bản học bổng chính thức của DNC.*

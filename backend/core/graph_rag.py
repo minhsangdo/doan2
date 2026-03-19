@@ -145,6 +145,23 @@ class GraphRAGEngine:
                 compare_prompt = "(Hệ thống: Người dùng đang yêu cầu SO SÁNH các ngành học. Hãy tìm thông tin của các ngành được nhắc đến trong câu hỏi từ các 'THÔNG TIN NGÀNH' phía trên, lập MỘT BẢNG SO SÁNH (Markdown) tương quan. Các tiêu chí nên có gồm: Mã ngành, Tổ hợp xét tuyển, Điểm chuẩn các phương thức, và Tính chất/Mô tả ngành học. Dùng định dạng Bảng để người xem dễ hình dung. Sau bảng, hãy tóm tắt ngắn gọn sự khác biệt. TUYỆT ĐỐI KHÔNG BỊA CHẾ THÔNG TIN NGOÀI NGỮ CẢNH.)"
                 context_parts.append(compare_prompt)
 
+        # HocBong (scholarship) retrieval
+        if intent == "hoc_bong":
+            try:
+                hoc_bong_list = self.db.get_all_hoc_bong()
+                if hoc_bong_list:
+                    hb_lines = []
+                    for hb in hoc_bong_list:
+                        hb_lines.append(f"[{hb.get('ma_hb')}] {hb.get('ten')}\n  Mô tả: {hb.get('mo_ta')}\n  Điều kiện: {hb.get('dieu_kien')}\n  Giá trị/Hỗ trợ: {hb.get('gia_tri')}\n  Đối tượng: {hb.get('doi_tuong')}")
+                    part = "--- HỌC BỔNG VÀ CHÍNH SÁCH HỖ TRỢ SINH VIÊN DNC ---\n" + "\n\n".join(hb_lines) + "\n-----------------------"
+                    context_parts.append(part)
+                    sources.append(Source(node_type="HocBong", name="Học bổng DNC"))
+                else:
+                    context_parts.append("(Hệ thống: Hiện chưa có dữ liệu học bổng trong cơ sở. Hãy khuyên người dùng liên hệ Phòng Công tác Sinh viên hoặc website DNC để biết chính sách học bổng mới nhất.)")
+            except Exception as e:
+                logger.error(f"Error getting hoc_bong: {e}")
+                context_parts.append("(Hệ thống: Tạm thời không truy xuất được thông tin học bổng. Hãy gợi ý người dùng xem trang chủ DNC hoặc liên hệ trực tiếp.)")
+
         # Phuong_thuc info retrieval
         if intent == "phuong_thuc" or "phương thức" in query.lower():
             # Simply get all method node descriptions

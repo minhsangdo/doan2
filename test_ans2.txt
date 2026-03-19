@@ -1,9 +1,0 @@
-START\nIntent: nganh_hoc\nEmb len: 1536\nSources: 0\nCtx: \nAns: Chào bạn, rất vui được hỗ trợ bạn!
-
-Hiện tại, hệ thống chưa tìm thấy thông tin chi tiết về ngành Công nghệ thông tin trong dữ liệu được cung cấp. Để đảm bảo bạn nhận được thông tin chính xác nhất về chương trình đào tạo, chỉ tiêu, tổ hợp xét tuyển và học phí của ngành này tại Đại học Nam Cần Thơ (DNC), bạn vui lòng liên hệ trực tiếp với Ban tư vấn tuyển sinh DNC qua các kênh sau:
-
-*   **Website:** [https://www.nctu.edu.vn](https://www.nctu.edu.vn)
-*   **Fanpage:** Đại học Nam Cần Thơ
-*   **Hotline:** (Thông tin liên hệ trực tiếp tại website trường)
-
-Chúc bạn sớm có được thông tin cần thiết và có một mùa tuyển sinh thành công tại DNC!\n

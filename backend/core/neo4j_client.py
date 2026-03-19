@@ -114,6 +114,39 @@ class Neo4jClient:
         """
         self.run_write_query(query, {"ten": nhom})
 
+    def create_hoc_bong(self, hb: dict) -> None:
+        """Create or update HocBong (scholarship) node."""
+        query = """
+        MERGE (h:HocBong {ma_hb: $ma_hb})
+        SET h.ten = $ten,
+            h.mo_ta = $mo_ta,
+            h.dieu_kien = $dieu_kien,
+            h.gia_tri = $gia_tri,
+            h.doi_tuong = $doi_tuong
+        """
+        self.run_write_query(query, {
+            "ma_hb": hb["ma_hb"],
+            "ten": hb.get("ten", ""),
+            "mo_ta": hb.get("mo_ta", ""),
+            "dieu_kien": hb.get("dieu_kien", ""),
+            "gia_tri": hb.get("gia_tri", ""),
+            "doi_tuong": hb.get("doi_tuong", ""),
+        })
+
+    def get_all_hoc_bong(self) -> List[Dict]:
+        """Get all HocBong nodes for context."""
+        query = """
+        MATCH (h:HocBong)
+        RETURN h.ma_hb AS ma_hb,
+               h.ten AS ten,
+               h.mo_ta AS mo_ta,
+               h.dieu_kien AS dieu_kien,
+               h.gia_tri AS gia_tri,
+               h.doi_tuong AS doi_tuong
+        ORDER BY h.ma_hb
+        """
+        return self.run_query(query)
+
     def link_nganh_tohop(self, ma_nganh: str, ma_tohop: str) -> None:
         """Create USES_COMBO relationship between Nganh and TohopMon."""
         query = """
@@ -374,7 +407,7 @@ class Neo4jClient:
             stats["node_counts"] = {r["label"]: r["count"] for r in results}
         except Exception:
             # Fallback without APOC
-            for label in ["Nganh", "DiemChuan", "TohopMon", "PhuongThuc", "NhomNganh"]:
+            for label in ["Nganh", "DiemChuan", "TohopMon", "PhuongThuc", "NhomNganh", "HocBong"]:
                 try:
                     q = f"MATCH (n:{label}) RETURN count(n) as count"
                     r = self.run_query(q)
@@ -408,6 +441,7 @@ class Neo4jClient:
             "CREATE CONSTRAINT tohopmon_unique IF NOT EXISTS FOR (t:TohopMon) REQUIRE t.ma_tohop IS UNIQUE",
             "CREATE CONSTRAINT phuongthuc_unique IF NOT EXISTS FOR (p:PhuongThuc) REQUIRE p.ma_pt IS UNIQUE",
             "CREATE CONSTRAINT nhomnganh_unique IF NOT EXISTS FOR (ng:NhomNganh) REQUIRE ng.ten IS UNIQUE",
+            "CREATE CONSTRAINT hocbong_unique IF NOT EXISTS FOR (h:HocBong) REQUIRE h.ma_hb IS UNIQUE",
         ]
         for c in constraints:
             try:
