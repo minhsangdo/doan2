@@ -1,56 +1,41 @@
+# Chỉ đồng bộ file cần chạy Space (tránh binary / repo nặng bị HF từ chối)
 name: Deploy to Hugging Face Space
 
 on:
   push:
-    branches: ["main"]
+    branches: [main, master]
   workflow_dispatch:
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout source
         uses: actions/checkout@v4
 
-      - name: Push to Hugging Face Space
+      - name: Push whitelist to Hugging Face Space
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
         run: |
           set -e
-
           git config --global user.email "actions@github.com"
           git config --global user.name "github-actions"
 
-          # Clone Hugging Face Space repo
           git clone "https://oauth2:${HF_TOKEN}@huggingface.co/spaces/minhsangdo/dnc-admission-chatbot" hf-space
 
-          # Sync code to Space
-          # Exclude binary/heavy files that trigger HF pre-receive hook
-          rsync -av --delete \
-            --exclude ".git" \
-            --exclude "hf-space" \
-            --exclude ".github" \
-            --exclude ".env" \
-            --exclude ".venv" \
-            --exclude "venv" \
-            --exclude "__pycache__" \
-            --exclude "*.pyc" \
-            --exclude "*.log" \
-            --exclude "data/raw/**" \
-            --exclude "*.pdf" \
-            --exclude "*.docx" \
-            --exclude "*.pptx" \
-            --exclude "*.zip" \
-            --exclude "*.rar" \
-            --exclude "*.png" \
-            --exclude "*.jpg" \
-            --exclude "*.jpeg" \
-            --exclude "*.webp" \
-            --exclude "*.gif" \
-            --exclude "*.svg" \
-            ./ hf-space/ || test $? -eq 24
+          # Giữ .git, xóa hết nội dung cũ (whitelist thay thế toàn bộ)
+          find hf-space -mindepth 1 -maxdepth 1 ! -name '.git' -exec rm -rf {} +
+
+          mkdir -p hf-space/data/processed
+          cp -r backend hf-space/
+          cp -r frontend hf-space/
+          rm -rf hf-space/frontend/node_modules
+          cp -r data/processed/. hf-space/data/processed/
+          cp -r scripts hf-space/
+          cp Dockerfile .dockerignore hf-space/
+          cp deploy/hf-README.md hf-space/README.md
 
           cd hf-space
-          git add .
-          git commit -m "Auto deploy from GitHub Actions" || echo
+          git add -A
+          git commit -m "Deploy: whitelist (backend, frontend, data/processed, Dockerfile)" || echo "No changes to commit"
+          git push

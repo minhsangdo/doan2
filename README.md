@@ -220,8 +220,11 @@ doan2_chatboxtuyensinh_DoMinhSang/
 ├── docs/                       # Hướng dẫn (vd: thêm dữ liệu học bổng)
 ├── scripts/
 │   └── seed_neo4j.py          # Seed toàn bộ graph từ data/processed/
+├── deploy/
+│   └── hf-README.md           # README + YAML metadata cho Hugging Face Space
+├── Dockerfile                 # Build HF Space: frontend static + backend :7860
 ├── README.md
-└── docker-compose.yml         # Neo4j
+└── docker-compose.yml         # Neo4j + backend + frontend (dev)
 ```
 
 ---
@@ -291,6 +294,14 @@ npm run dev
 ```
 
 Truy cập: **http://localhost:5173/**
+
+---
+
+## ☁️ Hugging Face Space (Docker)
+
+- **Dockerfile** ở thư mục gốc: build React (`npm run build`) + chạy FastAPI trên cổng **7860**, phục vụ giao diện từ `/` và API từ `/api`.
+- Trên Space: **Settings → Secrets** thêm `NEO4J_URI`, `NEO4J_USER`, `NEO4J_PASSWORD`, `OPENAI_API_KEY` (Gemini). Có thể thêm `FRONTEND_URL` = URL Space (hoặc để mặc định CORS `*`).
+- **GitHub Actions**: workflow `.github/workflows/deploy-hf-space.yml` chỉ copy whitelist (`backend/`, `frontend/`, `data/processed/`, `scripts/`, `Dockerfile`, `.dockerignore`, `deploy/hf-README.md` → `README.md` trên Space). Cần secret repo **`HF_TOKEN`** (token Hugging Face có quyền ghi Space).
 
 ---
 

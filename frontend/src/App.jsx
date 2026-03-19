@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
+import { API_URL } from './config';
 import { 
   Send, Bot, User, Sparkles, AlertCircle, RefreshCw, 
   Menu, X, MessageSquare, GraduationCap, MapPin, Globe, Phone, LogIn, UserPlus, LogOut, Loader2, Database,
@@ -9,7 +10,6 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import AdminDashboard from './AdminDashboard';
 
-const API_URL = "http://localhost:8000/api";
 
 export default function App() {
   const [messages, setMessages] = useState([

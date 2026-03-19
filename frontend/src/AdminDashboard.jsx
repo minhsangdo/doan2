@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts';
 import { Users, MessageSquare, BarChart3, Database, Save, Edit, Search } from 'lucide-react';
 import axios from 'axios';
+import { API_URL } from './config';
 
 const AdminDashboard = ({ token, onBack }) => {
   const [activeTab, setActiveTab] = useState('analytics');
@@ -20,10 +21,10 @@ const AdminDashboard = ({ token, onBack }) => {
       const headers = { Authorization: `Bearer ${token}` };
       
       if (activeTab === 'analytics') {
-        const res = await axios.get('http://localhost:8000/api/admin/stats/popular-majors', { headers });
+        const res = await axios.get(`${API_URL}/admin/stats/popular-majors`, { headers });
         setPopularMajors(res.data);
       } else if (activeTab === 'chatHistory') {
-        const res = await axios.get('http://localhost:8000/api/admin/chat-history', { headers });
+        const res = await axios.get(`${API_URL}/admin/chat-history`, { headers });
         setChatHistory(res.data);
       }
     } catch (err) {
