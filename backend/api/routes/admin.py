@@ -12,6 +12,7 @@ from fastapi import Depends
 from core.database import get_db
 from models.database_models import User, ChatSession, ChatMessage
 from api.routes.auth import get_current_user
+from core.kg_bootstrap import resolved_kg_data_dir
 
 logger = logging.getLogger(__name__)
 
@@ -24,7 +25,7 @@ def check_admin(current_user: User = Depends(get_current_user)):
 router = APIRouter(prefix="/admin", tags=["Admin"])
 
 @router.get("/stats", response_model=KGStats)
-async def get_stats():
+async def get_stats(_: User = Depends(check_admin)):
     """Lấy thống kê của Neo4j Knowledge Graph."""
     try:
         db = get_neo4j_client()
@@ -45,7 +46,7 @@ async def rebuild_graph(req: RebuildKGRequest, _: User = Depends(check_admin)):
 
     try:
         if req.full_ingest:
-            data_dir = _resolved_kg_data_dir()
+            data_dir = resolved_kg_data_dir()
             if not os.path.isdir(data_dir):
                 raise HTTPException(
                     status_code=400,

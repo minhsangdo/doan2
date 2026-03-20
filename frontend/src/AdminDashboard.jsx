@@ -320,9 +320,11 @@ const AdminDashboard = ({ token, onBack }) => {
                     <p className="font-semibold">Neo4j đang trống (0 ngành) — chatbot chưa có dữ liệu để trả lời.</p>
                     <ol className="list-decimal list-inside space-y-1 text-blue-800">
                       <li>
-                        Tick <strong>ô xác nhận đầu tiên</strong> (bắt buộc), giữ tick <strong>Nạp đầy đủ từ JSON</strong>.
+                        <strong>Đợi 2–8 phút</strong> sau khi Space khởi động: server thường <strong>tự nạp</strong> dữ liệu nếu Neo4j trống (xem <code>/api/health</code> → <code>nganh_count</code>).
                       </li>
-                      <li>Bấm <strong>Thực hiện rebuild</strong> và đợi (có thể vài phút — cần Secret <code>OPENAI_API_KEY</code> trên Space để tạo embedding).</li>
+                      <li>
+                        Hoặc tick <strong>Bước 1 + Bước 2</strong> rồi <strong>Thực hiện rebuild</strong> (cần Secret <code>OPENAI_API_KEY</code>).
+                      </li>
                       <li>Tải lại trang hoặc chuyển tab rồi quay lại để thấy danh sách ngành.</li>
                     </ol>
                   </div>

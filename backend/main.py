@@ -1,6 +1,7 @@
 """
 FastAPI application entry point for DNC Chatbot Backend.
 """
+import asyncio
 import logging
 import os
 from fastapi import FastAPI
@@ -12,6 +13,7 @@ from dotenv import load_dotenv
 from api.routes import chat, admin, auth
 from api.middleware import setup_middlewares
 from core.neo4j_client import get_neo4j_client
+from core.kg_bootstrap import background_seed_neo4j_if_empty
 from core.database import engine, Base, SessionLocal
 import models.database_models
 from models.database_models import User
@@ -98,6 +100,13 @@ async def startup_event():
     db = get_neo4j_client()
     if db.verify_connectivity():
         logger.info("✅ Kết nối Neo4j thành công!")
+        # Nạp KG từ data/processed nếu DB trống (HF Space — không cần bấm Rebuild).
+        # Tắt: KG_AUTO_SEED=false. Chạy nền để container vẫn "healthy" trong lúc embedding.
+        try:
+            loop = asyncio.get_running_loop()
+            loop.run_in_executor(None, background_seed_neo4j_if_empty)
+        except Exception:
+            logger.exception("Không thể khởi chạy nền nạp KG")
     else:
         logger.warning("❌ Không thể kết nối Neo4j. Kiểm tra lại thông tin môi trường!")
 
@@ -111,8 +120,16 @@ async def shutdown_event():
 async def check_health():
     """Kiểm tra sức khỏe HT"""
     db = get_neo4j_client()
-    status = "OK" if db.verify_connectivity() else "ERROR"
-    return {"status": status, "neo4j": status}
+    ok = db.verify_connectivity()
+    status = "OK" if ok else "ERROR"
+    out = {"status": status, "neo4j": status}
+    if ok:
+        try:
+            r = db.run_query("MATCH (n:Nganh) RETURN count(n) AS c")
+            out["nganh_count"] = int(r[0]["c"]) if r else 0
+        except Exception:
+            out["nganh_count"] = None
+    return out
 
 if __name__ == "__main__":
     import uvicorn
