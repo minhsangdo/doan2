@@ -755,7 +755,9 @@ export default function App() {
       {/* Sidebar */}
       <aside 
         className={`${
-          isSidebarOpen ? 'translate-x-0 w-[85vw] sm:w-80' : '-translate-x-full w-0'
+          isSidebarOpen
+            ? 'translate-x-0 w-[85vw] sm:w-80 pointer-events-auto'
+            : '-translate-x-full w-[85vw] sm:w-80 pointer-events-none'
         } fixed lg:static inset-y-0 left-0 z-40 bg-white/80 backdrop-blur-xl border-r border-slate-200/60 shadow-[4px_0_24px_rgba(0,0,0,0.02)] transition-all duration-300 ease-in-out flex flex-col`}
       >
         <div className="p-6 flex flex-col items-center border-b border-slate-100">
