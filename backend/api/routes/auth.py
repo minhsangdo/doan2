@@ -118,12 +118,12 @@ def forgot_password(
     request: Request,
     db: Session = Depends(get_db),
 ):
-    if not is_smtp_configured():
+    if not is_email_sending_configured():
         raise HTTPException(
             status_code=503,
             detail=(
-                "Hệ thống chưa cấu hình gửi email. "
-                "Quản trị viên cần đặt biến môi trường MAIL_USERNAME và MAIL_PASSWORD (SMTP)."
+                "Chưa cấu hình gửi email. Trên Hugging Face thêm Secret RESEND_API_KEY (và RESEND_FROM). "
+                "Hoặc chạy local: MAIL_USERNAME + MAIL_PASSWORD (Gmail SMTP)."
             ),
         )
 
@@ -154,18 +154,20 @@ def forgot_password(
 
     try:
         send_reset_email(user.email, reset_link)
-    except Exception:
+    except Exception as e:
         user.reset_token = None
         user.reset_token_expire = None
         db.commit()
         logger.exception("Gửi email đặt lại mật khẩu thất bại; đã hủy token.")
-        raise HTTPException(
-            status_code=500,
-            detail=(
-                "Lỗi khi gửi email. Trên Hugging Face hãy dùng Resend (RESEND_API_KEY); "
-                "SMTP Gmail thường không hoạt động trong Space."
-            ),
-        )
+        hint = str(e).strip()
+        if hint.startswith("RESEND_"):
+            detail = f"Không gửi được email (Resend). {hint}. Kiểm tra RESEND_API_KEY và RESEND_FROM (@ domain đã verify)."
+        else:
+            detail = (
+                "Lỗi khi gửi email. Trên Space cần RESEND_API_KEY; SMTP Gmail thường không chạy được. "
+                + (f" Chi tiết: {hint}" if hint else "")
+            )
+        raise HTTPException(status_code=500, detail=detail)
 
     return {
         "message": "Nếu email tồn tại trong hệ thống, bạn sẽ nhận được một đường link đặt lại mật khẩu."

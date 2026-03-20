@@ -242,13 +242,19 @@ export default function App() {
       );
       setAuthSuccess(res.data.message);
     } catch (err) {
-      const d = err.response?.data?.detail;
-      const msg =
+      const data = err.response?.data;
+      const d = data?.detail;
+      let msg =
         typeof d === 'string'
           ? d
           : Array.isArray(d)
             ? d.map((x) => x.msg || JSON.stringify(x)).join(' ')
-            : 'Lỗi khi gửi yêu cầu. Vui lòng thử lại.';
+            : typeof data?.message === 'string'
+              ? data.message
+              : err.message;
+      if (!msg || msg === 'Network Error') {
+        msg = 'Lỗi khi gửi yêu cầu. Kiểm tra kết nối hoặc thử lại.';
+      }
       setAuthError(msg);
     } finally {
       setIsAuthLoading(false);

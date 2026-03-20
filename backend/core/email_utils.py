@@ -80,6 +80,13 @@ def _send_via_resend(to_email: str, subject: str, html: str, text: str, api_key:
     )
     if r.status_code >= 400:
         logger.error("Resend API %s: %s", r.status_code, r.text)
+        # Trả lỗi rõ ràng cho API (Resend trả JSON message)
+        try:
+            err_body = r.json()
+            err_msg = err_body.get("message") or err_body.get("name") or r.text
+        except Exception:
+            err_msg = r.text or str(r.status_code)
+        raise RuntimeError(f"RESEND_{r.status_code}: {err_msg}")
     r.raise_for_status()
 
 
