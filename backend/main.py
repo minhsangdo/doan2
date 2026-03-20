@@ -12,11 +12,42 @@ from dotenv import load_dotenv
 from api.routes import chat, admin, auth
 from api.middleware import setup_middlewares
 from core.neo4j_client import get_neo4j_client
-from core.database import engine, Base
+from core.database import engine, Base, SessionLocal
 import models.database_models
+from models.database_models import User
+from core.security import get_password_hash
 
 # Create SQLite tables
 Base.metadata.create_all(bind=engine)
+
+
+def _ensure_default_admin_if_missing() -> None:
+    """
+    Trên Hugging Face / Docker, SQLite thường mới tinh → chưa có admin.
+    Chạy tay: python create_admin.py. Ở đây tự tạo một lần nếu chưa có user 'admin'.
+    Tắt: DISABLE_DEFAULT_ADMIN=1 | Đổi mật khẩu lần đầu: ADMIN_INITIAL_PASSWORD
+    """
+    if os.environ.get("DISABLE_DEFAULT_ADMIN", "").strip().lower() in ("1", "true", "yes"):
+        return
+    db = SessionLocal()
+    try:
+        if db.query(User).filter(User.username == "admin").first():
+            return
+        pwd = os.environ.get("ADMIN_INITIAL_PASSWORD", "admin123").strip() or "admin123"
+        admin_user = User(
+            username="admin",
+            email="admin@dnc.edu.vn",
+            hashed_password=get_password_hash(pwd),
+        )
+        db.add(admin_user)
+        db.commit()
+        logger.info("Đã tạo user admin mặc định (DB trống). Đăng nhập: admin / (xem ADMIN_INITIAL_PASSWORD hoặc admin123)")
+    except Exception:
+        logger.exception("Không thể tạo admin mặc định")
+        db.rollback()
+    finally:
+        db.close()
+
 
 # Configure logging
 logging.basicConfig(
@@ -62,6 +93,7 @@ else:
 @app.on_event("startup")
 async def startup_event():
     """Kiểm tra kết nối lúc khởi động"""
+    _ensure_default_admin_if_missing()
     logger.info("Khởi động hệ thống DNC Chatbot Backend...")
     db = get_neo4j_client()
     if db.verify_connectivity():
