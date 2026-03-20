@@ -30,7 +30,7 @@
   {"ma_tohop": "X05", "ten": "Toán - Lý - GDKTPL", "cac_mon": ["Toán", "Vật lý", "Giáo dục kinh tế và pháp luật"]},
   {"ma_tohop": "X06", "ten": "Toán - Lý - Tin", "cac_mon": ["Toán", "Vật lý", "Tin học"]},
   {"ma_tohop": "X07", "ten": "Toán - Lý - Công nghệ", "cac_mon": ["Toán", "Vật lý", "Công nghệ"]},
-  {"ma_tohop": "X08", "ten": "Toán - Lý - Công nghệ", "cac_mon": ["Toán", "Vật lý", "Công nghệ"]},
+  {"ma_tohop": "X08", "ten": "Toán - Sinh - Công nghệ", "cac_mon": ["Toán", "Sinh học", "Công nghệ"]},
   {"ma_tohop": "X10", "ten": "Toán - Hóa - Tin", "cac_mon": ["Toán", "Hóa học", "Tin học"]},
   {"ma_tohop": "X14", "ten": "Toán - Sinh - Tin", "cac_mon": ["Toán", "Sinh học", "Tin học"]},
   {"ma_tohop": "X17", "ten": "Toán - Sử - GDKTPL", "cac_mon": ["Toán", "Lịch sử", "Giáo dục kinh tế và pháp luật"]},

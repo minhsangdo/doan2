@@ -16,7 +16,7 @@
   {"ma_nganh": "7480101", "ten": "Khoa học máy tính", "nam": 2025, "diem_thpt": 15.0, "diem_hocba": 18.0, "diem_dgnl": 500, "diem_vsat": 225},
   {"ma_nganh": "7480101-01", "ten": "Khoa học máy tính (Chuyên ngành Thiết kế vi mạch bán dẫn)", "nam": 2025, "diem_thpt": 15.0, "diem_hocba": 18.0, "diem_dgnl": 500, "diem_vsat": 225},
   {"ma_nganh": "7480102", "ten": "Mạng máy tính và truyền thông dữ liệu", "nam": 2025, "diem_thpt": 15.0, "diem_hocba": 18.0, "diem_dgnl": 500, "diem_vsat": 225},
-  {"ma_nganh": "7480107", "ten": "Trí tuệ nhân tạo", "nam": 2025, "diem_thpt": 15.0, "diem_hocba": 18.0, "diem_dgnl": 500, "diem_vsat": 225},
+  {"ma_nganh": "7480207", "ten": "Trí tuệ nhân tạo", "nam": 2025, "diem_thpt": 15.0, "diem_hocba": 18.0, "diem_dgnl": 500, "diem_vsat": 225},
   {"ma_nganh": "7510301", "ten": "Công nghệ kỹ thuật điện, điện tử", "nam": 2025, "diem_thpt": 15.0, "diem_hocba": 18.0, "diem_dgnl": 500, "diem_vsat": 225},
   {"ma_nganh": "7540101", "ten": "Công nghệ thực phẩm", "nam": 2025, "diem_thpt": 15.0, "diem_hocba": 18.0, "diem_dgnl": 500, "diem_vsat": 225},
   {"ma_nganh": "7510401", "ten": "Công nghệ kỹ thuật hóa học", "nam": 2025, "diem_thpt": 15.0, "diem_hocba": 18.0, "diem_dgnl": 500, "diem_vsat": 225},

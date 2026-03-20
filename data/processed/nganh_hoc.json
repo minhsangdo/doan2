@@ -4,359 +4,776 @@
     "ma_nganh": "7720101",
     "ten": "Y khoa (Bác sĩ đa khoa)",
     "nhom": "Y-Duoc",
-    "tohop_mon": ["B00", "A00", "A02", "B03", "D07", "D08"],
-    "mo_ta": "Đào tạo bác sĩ y khoa đa khoa 6 năm"
+    "tohop_mon": [
+      "B00",
+      "A00",
+      "A02",
+      "B03",
+      "D07",
+      "D08"
+    ],
+    "mo_ta": "Chương trình đại học chính quy 6 năm, đào tạo bác sĩ đa khoa; kiến thức nền y học, lâm sàng và thực hành tại bệnh viện. Văn bằng: Bác sĩ Y khoa."
   },
   {
     "stt": 2,
     "ma_nganh": "7720501",
     "ten": "Răng - Hàm - Mặt (Bác sĩ Nha khoa)",
     "nhom": "Y-Duoc",
-    "tohop_mon": ["B00", "A00", "A02", "B03", "D07", "D08"],
-    "mo_ta": "Đào tạo bác sĩ răng hàm mặt"
+    "tohop_mon": [
+      "B00",
+      "A00",
+      "A02",
+      "B03",
+      "D07",
+      "D08"
+    ],
+    "mo_ta": "Đào tạo bác sĩ chuyên khoa Răng - Hàm - Mặt; chương trình 6 năm, thực hành nha khoa và phẫu thuật tạo hình vùng mặt."
   },
   {
     "stt": 3,
     "ma_nganh": "7720110",
     "ten": "Y học dự phòng (Bác sĩ Y học dự phòng)",
     "nhom": "Y-Duoc",
-    "tohop_mon": ["B00", "A00", "A02", "B03", "D07", "D08"],
-    "mo_ta": "Đào tạo bác sĩ y học dự phòng"
+    "tohop_mon": [
+      "B00",
+      "A00",
+      "A02",
+      "B03",
+      "D07",
+      "D08"
+    ],
+    "mo_ta": "Đào tạo bác sĩ Y học dự phòng; phòng bệnh cộng đồng, dịch tễ, vệ sinh môi trường và quản lý sức khỏe công cộng."
   },
   {
     "stt": 4,
     "ma_nganh": "7720201",
     "ten": "Dược học",
     "nhom": "Y-Duoc",
-    "tohop_mon": ["B00", "A00", "A02", "B03", "D07", "D08"],
-    "mo_ta": "Đào tạo dược sĩ đại học"
+    "tohop_mon": [
+      "B00",
+      "A00",
+      "A02",
+      "B03",
+      "D07",
+      "D08"
+    ],
+    "mo_ta": "Đào tạo dược sĩ đại học; dược lâm sàng, công nghệ dược, quản lý và cung ứng thuốc an toàn."
   },
   {
     "stt": 5,
     "ma_nganh": "7720301",
     "ten": "Điều dưỡng",
     "nhom": "Y-Duoc",
-    "tohop_mon": ["B00", "A00", "A11", "B03", "D01", "D07", "D08", "X10"],
-    "mo_ta": "Đào tạo cử nhân điều dưỡng"
+    "tohop_mon": [
+      "B00",
+      "A00",
+      "A11",
+      "B03",
+      "D01",
+      "D07",
+      "D08",
+      "X10"
+    ],
+    "mo_ta": "Cử nhân Điều dưỡng; chăm sóc người bệnh, hỗ trợ điều trị, phối hợp ekip y tế tại bệnh viện và cộng đồng."
   },
   {
     "stt": 6,
     "ma_nganh": "7720601",
     "ten": "Kỹ thuật xét nghiệm y học",
     "nhom": "Y-Duoc",
-    "tohop_mon": ["B00", "A00", "A11", "B03", "D01", "D07", "D08", "X10"],
-    "mo_ta": "Đào tạo cử nhân kỹ thuật xét nghiệm y học"
+    "tohop_mon": [
+      "B00",
+      "A00",
+      "A11",
+      "B03",
+      "D01",
+      "D07",
+      "D08",
+      "X10"
+    ],
+    "mo_ta": "Kỹ thuật viên xét nghiệm: lấy mẫu, phân tích mô, huyết học, sinh hóa phục vụ chẩn đoán."
   },
   {
     "stt": 7,
     "ma_nganh": "7720602",
     "ten": "Kỹ thuật hình ảnh y học",
     "nhom": "Y-Duoc",
-    "tohop_mon": ["B00", "A00", "A11", "B03", "D01", "D07", "D08", "X10"],
-    "mo_ta": "Đào tạo cử nhân kỹ thuật hình ảnh y học"
+    "tohop_mon": [
+      "B00",
+      "A00",
+      "A11",
+      "B03",
+      "D01",
+      "D07",
+      "D08",
+      "X10"
+    ],
+    "mo_ta": "Kỹ thuật hình ảnh y học: siêu âm, X-quang, CT, MRI (theo định hướng đào tạo); hỗ trợ chẩn đoán hình ảnh."
   },
   {
     "stt": 8,
     "ma_nganh": "7720802",
     "ten": "Quản lý bệnh viện",
     "nhom": "Y-Duoc",
-    "tohop_mon": ["B00", "B03", "C01", "C02", "D01", "X10", "A11", "X06"],
-    "mo_ta": "Đào tạo cử nhân quản lý bệnh viện"
+    "tohop_mon": [
+      "B00",
+      "B03",
+      "C01",
+      "C02",
+      "D01",
+      "X10",
+      "A11",
+      "X06"
+    ],
+    "mo_ta": "Quản trị bệnh viện và hệ thống y tế: tổ chức, nhân sự, chất lượng dịch vụ và vận hành cơ sở khám chữa bệnh."
   },
   {
     "stt": 9,
     "ma_nganh": "7520212",
     "ten": "Kỹ thuật y sinh (Khoa học và công nghệ y khoa)",
     "nhom": "Ky-thuat",
-    "tohop_mon": ["A00", "A01", "A02", "B00", "D01", "X06", "X08"],
-    "mo_ta": "Đào tạo kỹ sư kỹ thuật y sinh"
+    "tohop_mon": [
+      "A00",
+      "A01",
+      "A02",
+      "B00",
+      "D01",
+      "X06",
+      "X08"
+    ],
+    "mo_ta": "Kỹ sư kỹ thuật y sinh / khoa học công nghệ y khoa: thiết bị y tế, tín hiệu sinh học, hỗ trợ chẩn đoán và điều trị."
   },
   {
     "stt": 10,
     "ma_nganh": "7510205",
     "ten": "Công nghệ kỹ thuật ô tô",
     "nhom": "Ky-thuat",
-    "tohop_mon": ["A00", "A01", "A02", "A10", "D01", "D07", "X02", "X06", "X08"],
-    "mo_ta": "Đào tạo kỹ sư công nghệ kỹ thuật ô tô"
+    "tohop_mon": [
+      "A00",
+      "A01",
+      "A02",
+      "A10",
+      "D01",
+      "D07",
+      "X02",
+      "X06",
+      "X08"
+    ],
+    "mo_ta": "Kỹ sư ô tô: thiết kế, chế tạo, bảo dưỡng động cơ, khung gầm, hệ thống điện ô tô truyền thống."
   },
   {
     "stt": 11,
     "ma_nganh": "7510205-01",
     "ten": "Công nghệ kỹ thuật ô tô (Chuyên ngành Ô tô điện)",
     "nhom": "Ky-thuat",
-    "tohop_mon": ["A00", "A01", "A02", "A10", "D01", "D07", "X02", "X06", "X08"],
-    "mo_ta": "Đào tạo kỹ sư ô tô điện"
+    "tohop_mon": [
+      "A00",
+      "A01",
+      "A02",
+      "A10",
+      "D01",
+      "D07",
+      "X02",
+      "X06",
+      "X08"
+    ],
+    "mo_ta": "Chuyên sâu ô tô điện (EV): pin, motor, điều khiển, sạc và hệ thống truyền động xanh."
   },
   {
     "stt": 12,
     "ma_nganh": "7520116",
     "ten": "Kỹ thuật cơ khí động lực",
     "nhom": "Ky-thuat",
-    "tohop_mon": ["A00", "A01", "A02", "A10", "D01", "D07", "X02", "X06", "X08"],
-    "mo_ta": "Đào tạo kỹ sư kỹ thuật cơ khí động lực"
+    "tohop_mon": [
+      "A00",
+      "A01",
+      "A02",
+      "A10",
+      "D01",
+      "D07",
+      "X02",
+      "X06",
+      "X08"
+    ],
+    "mo_ta": "Kỹ sư cơ khí động lực: động cơ đốt trong, truyền động, máy và thiết bị năng lượng."
   },
   {
     "stt": 13,
     "ma_nganh": "7480201",
     "ten": "Công nghệ thông tin",
     "nhom": "CNTT",
-    "tohop_mon": ["A00", "A01", "A02", "C01", "D01", "D84", "X06", "X07", "X26"],
-    "mo_ta": "Đào tạo cử nhân công nghệ thông tin"
+    "tohop_mon": [
+      "A00",
+      "A01",
+      "A02",
+      "C01",
+      "D01",
+      "D84",
+      "X06",
+      "X07",
+      "X26"
+    ],
+    "mo_ta": "Cử nhân CNTT: lập trình, hệ thống thông tin, cơ sở dữ liệu, phát triển phần mềm và ứng dụng."
   },
   {
     "stt": 14,
     "ma_nganh": "7480103",
     "ten": "Kỹ thuật phần mềm",
     "nhom": "CNTT",
-    "tohop_mon": ["A00", "A01", "A02", "C01", "D01", "D84", "X06", "X07", "X26"],
-    "mo_ta": "Đào tạo kỹ sư phần mềm"
+    "tohop_mon": [
+      "A00",
+      "A01",
+      "A02",
+      "C01",
+      "D01",
+      "D84",
+      "X06",
+      "X07",
+      "X26"
+    ],
+    "mo_ta": "Kỹ sư phần mềm: phân tích thiết kế, kiểm thử, DevOps, ứng dụng web/mobile và bảo mật phần mềm."
   },
   {
     "stt": 15,
     "ma_nganh": "7480101",
     "ten": "Khoa học máy tính",
     "nhom": "CNTT",
-    "tohop_mon": ["A00", "A01", "A02", "C01", "D01", "D84", "X06", "X07", "X26"],
-    "mo_ta": "Đào tạo cử nhân khoa học máy tính"
+    "tohop_mon": [
+      "A00",
+      "A01",
+      "A02",
+      "C01",
+      "D01",
+      "D84",
+      "X06",
+      "X07",
+      "X26"
+    ],
+    "mo_ta": "Khoa học máy tính: thuật toán, cấu trúc dữ liệu, trí tuệ nhân tạo cơ bản, hệ điều hành."
   },
   {
     "stt": 16,
     "ma_nganh": "7480101-01",
     "ten": "Khoa học máy tính (Chuyên ngành Thiết kế vi mạch bán dẫn)",
     "nhom": "CNTT",
-    "tohop_mon": ["A00", "A01", "A02", "C01", "D01", "D84", "X06", "X07", "X26"],
-    "mo_ta": "Đào tạo kỹ sư thiết kế vi mạch bán dẫn"
+    "tohop_mon": [
+      "A00",
+      "A01",
+      "A02",
+      "C01",
+      "D01",
+      "D84",
+      "X06",
+      "X07",
+      "X26"
+    ],
+    "mo_ta": "Chuyên ngành thiết kế vi mạch bán dẫn: thiết kế IC, vật liệu bán dẫn, mô phỏng và quy trình sản xuất chip."
   },
   {
     "stt": 17,
     "ma_nganh": "7480102",
     "ten": "Mạng máy tính và truyền thông dữ liệu",
     "nhom": "CNTT",
-    "tohop_mon": ["A00", "A01", "A02", "C01", "D01", "D84", "X06", "X07", "X26"],
-    "mo_ta": "Đào tạo cử nhân mạng máy tính và truyền thông dữ liệu"
+    "tohop_mon": [
+      "A00",
+      "A01",
+      "A02",
+      "C01",
+      "D01",
+      "D84",
+      "X06",
+      "X07",
+      "X26"
+    ],
+    "mo_ta": "Mạng máy tính và truyền thông dữ liệu: an ninh mạng, hạ tầng mạng, IoT, quản trị hệ thống."
   },
   {
     "stt": 18,
-    "ma_nganh": "7480107",
+    "ma_nganh": "7480207",
     "ten": "Trí tuệ nhân tạo",
     "nhom": "CNTT",
-    "tohop_mon": ["A00", "A01", "A02", "C01", "D01", "D84", "X06", "X07", "X26"],
-    "mo_ta": "Đào tạo cử nhân trí tuệ nhân tạo"
+    "tohop_mon": [
+      "A00",
+      "A01",
+      "A02",
+      "C01",
+      "D01",
+      "D84",
+      "X06",
+      "X07",
+      "X26"
+    ],
+    "mo_ta": "Trí tuệ nhân tạo (AI): machine learning, deep learning, xử lý ngôn ngữ tự nhiên, thị giác máy tính và ứng dụng."
   },
   {
     "stt": 19,
     "ma_nganh": "7510301",
     "ten": "Công nghệ kỹ thuật điện, điện tử",
     "nhom": "Ky-thuat",
-    "tohop_mon": ["A00", "A01", "A02", "C01", "D01", "X06", "X01", "X26"],
-    "mo_ta": "Đào tạo kỹ sư công nghệ kỹ thuật điện, điện tử"
+    "tohop_mon": [
+      "A00",
+      "A01",
+      "A02",
+      "C01",
+      "D01",
+      "X06",
+      "X01",
+      "X26"
+    ],
+    "mo_ta": "Kỹ sư điện - điện tử: hệ thống điện, điều khiển tự động, điện tử công suất và ứng dụng công nghiệp."
   },
   {
     "stt": 20,
     "ma_nganh": "7540101",
     "ten": "Công nghệ thực phẩm",
     "nhom": "Ky-thuat",
-    "tohop_mon": ["A00", "A02", "B00", "B08", "D01", "D07", "X01", "X14"],
-    "mo_ta": "Đào tạo kỹ sư công nghệ thực phẩm"
+    "tohop_mon": [
+      "A00",
+      "A02",
+      "B00",
+      "B08",
+      "D01",
+      "D07",
+      "X01",
+      "X14"
+    ],
+    "mo_ta": "Công nghệ thực phẩm: bảo quản chế biến, an toàn thực phẩm, chất lượng và phát triển sản phẩm."
   },
   {
     "stt": 21,
     "ma_nganh": "7510401",
     "ten": "Công nghệ kỹ thuật hóa học",
     "nhom": "Ky-thuat",
-    "tohop_mon": ["B00", "B08", "D01", "D07", "X01", "X14"],
-    "mo_ta": "Đào tạo kỹ sư công nghệ kỹ thuật hóa học"
+    "tohop_mon": [
+      "B00",
+      "B08",
+      "D01",
+      "D07",
+      "X01",
+      "X14"
+    ],
+    "mo_ta": "Kỹ thuật hóa học: quy trình hóa học, vật liệu, hóa dược và công nghiệp hóa chất."
   },
   {
     "stt": 22,
     "ma_nganh": "7340101",
     "ten": "Quản trị kinh doanh",
     "nhom": "Kinh-te",
-    "tohop_mon": ["A00", "A01", "C03", "C04", "D01", "D10", "X17", "X56", "Y07"],
-    "mo_ta": "Đào tạo cử nhân quản trị kinh doanh"
+    "tohop_mon": [
+      "A00",
+      "A01",
+      "C03",
+      "C04",
+      "D01",
+      "D10",
+      "X17",
+      "X56",
+      "Y07"
+    ],
+    "mo_ta": "Quản trị kinh doanh: chiến lược, marketing, nhân sự, vận hành doanh nghiệp."
   },
   {
     "stt": 23,
     "ma_nganh": "7340201",
     "ten": "Tài chính - ngân hàng",
     "nhom": "Kinh-te",
-    "tohop_mon": ["A00", "A01", "C03", "C04", "D01", "D10", "X17", "X56", "Y07"],
-    "mo_ta": "Đào tạo cử nhân tài chính ngân hàng"
+    "tohop_mon": [
+      "A00",
+      "A01",
+      "C03",
+      "C04",
+      "D01",
+      "D10",
+      "X17",
+      "X56",
+      "Y07"
+    ],
+    "mo_ta": "Tài chính - Ngân hàng: tín dụng, đầu tư, quản trị rủi ro và dịch vụ ngân hàng hiện đại."
   },
   {
     "stt": 24,
     "ma_nganh": "7340301",
     "ten": "Kế toán",
     "nhom": "Kinh-te",
-    "tohop_mon": ["A00", "A01", "C03", "C04", "D01", "D10", "X17", "X56", "Y07"],
-    "mo_ta": "Đào tạo cử nhân kế toán"
+    "tohop_mon": [
+      "A00",
+      "A01",
+      "C03",
+      "C04",
+      "D01",
+      "D10",
+      "X17",
+      "X56",
+      "Y07"
+    ],
+    "mo_ta": "Kế toán: kế toán tài chính, quản trị, kiểm toán và chuẩn mực báo cáo."
   },
   {
     "stt": 25,
     "ma_nganh": "7340115",
     "ten": "Marketing",
     "nhom": "Kinh-te",
-    "tohop_mon": ["A00", "A01", "C03", "C04", "D01", "D10", "X17", "X56", "Y07"],
-    "mo_ta": "Đào tạo cử nhân marketing"
+    "tohop_mon": [
+      "A00",
+      "A01",
+      "C03",
+      "C04",
+      "D01",
+      "D10",
+      "X17",
+      "X56",
+      "Y07"
+    ],
+    "mo_ta": "Marketing: nghiên cứu thị trường, thương hiệu, truyền thông kỹ số."
   },
   {
     "stt": 26,
     "ma_nganh": "7340120",
     "ten": "Kinh doanh quốc tế",
     "nhom": "Kinh-te",
-    "tohop_mon": ["A00", "A01", "C03", "C04", "D01", "D10", "X17", "X56", "Y07"],
-    "mo_ta": "Đào tạo cử nhân kinh doanh quốc tế"
+    "tohop_mon": [
+      "A00",
+      "A01",
+      "C03",
+      "C04",
+      "D01",
+      "D10",
+      "X17",
+      "X56",
+      "Y07"
+    ],
+    "mo_ta": "Kinh doanh quốc tế: xuất nhập khẩu, logistics quốc tế, giao thương đa văn hóa."
   },
   {
     "stt": 27,
     "ma_nganh": "7310109",
     "ten": "Kinh tế số",
     "nhom": "Kinh-te",
-    "tohop_mon": ["A00", "A01", "C03", "C04", "D01", "D10", "X17", "X56", "Y07"],
-    "mo_ta": "Đào tạo cử nhân kinh tế số"
+    "tohop_mon": [
+      "A00",
+      "A01",
+      "C03",
+      "C04",
+      "D01",
+      "D10",
+      "X17",
+      "X56",
+      "Y07"
+    ],
+    "mo_ta": "Kinh tế số: thương mại điện tử, dữ liệu lớn trong kinh doanh, mô hình kinh tế nền tảng số."
   },
   {
     "stt": 28,
     "ma_nganh": "7340122",
     "ten": "Thương mại điện tử",
     "nhom": "Kinh-te",
-    "tohop_mon": ["A00", "A01", "C03", "C04", "D01", "D10", "X17", "X56", "Y07"],
-    "mo_ta": "Đào tạo cử nhân thương mại điện tử"
+    "tohop_mon": [
+      "A00",
+      "A01",
+      "C03",
+      "C04",
+      "D01",
+      "D10",
+      "X17",
+      "X56",
+      "Y07"
+    ],
+    "mo_ta": "Thương mại điện tử: vận hành sàn, thanh toán số, marketing online và logistics TMĐT."
   },
   {
     "stt": 29,
     "ma_nganh": "7340116",
     "ten": "Bất động sản",
     "nhom": "Kinh-te",
-    "tohop_mon": ["A00", "B00", "C03", "C04", "C05", "C08", "D01", "D84", "X26"],
-    "mo_ta": "Đào tạo cử nhân bất động sản"
+    "tohop_mon": [
+      "A00",
+      "B00",
+      "C03",
+      "C04",
+      "C05",
+      "C08",
+      "D01",
+      "D84",
+      "X26"
+    ],
+    "mo_ta": "Bất động sản: môi giới, quản lý dự án, pháp lý và định giá bất động sản."
   },
   {
     "stt": 30,
     "ma_nganh": "7510605",
     "ten": "Logistics và quản lý chuỗi cung ứng",
     "nhom": "Kinh-te",
-    "tohop_mon": ["A00", "A01", "C03", "D01", "D07", "X17", "X26", "X56"],
-    "mo_ta": "Đào tạo cử nhân logistics và quản lý chuỗi cung ứng"
+    "tohop_mon": [
+      "A00",
+      "A01",
+      "C03",
+      "D01",
+      "D07",
+      "X17",
+      "X26",
+      "X56"
+    ],
+    "mo_ta": "Logistics và quản lý chuỗi cung ứng: kho bãi, vận tải, hoạch định nguồn lực và tối ưu chuỗi cung ứng."
   },
   {
     "stt": 31,
     "ma_nganh": "7510601",
     "ten": "Quản lý công nghiệp",
     "nhom": "Kinh-te",
-    "tohop_mon": ["A00", "A01", "C03", "D01", "D07", "X17", "X26", "X56"],
-    "mo_ta": "Đào tạo cử nhân quản lý công nghiệp"
+    "tohop_mon": [
+      "A00",
+      "A01",
+      "C03",
+      "D01",
+      "D07",
+      "X17",
+      "X26",
+      "X56"
+    ],
+    "mo_ta": "Quản lý công nghiệp: sản xuất tinh gọn, 5S, ISO, quản trị chất lượng và an toàn lao động."
   },
   {
     "stt": 32,
     "ma_nganh": "7320108",
     "ten": "Quan hệ công chúng (PR)",
     "nhom": "Truyen-thong",
-    "tohop_mon": ["C00", "C03", "D01", "D14", "D15", "D66", "X71", "X17", "Y07"],
-    "mo_ta": "Đào tạo cử nhân quan hệ công chúng"
+    "tohop_mon": [
+      "C00",
+      "C03",
+      "D01",
+      "D14",
+      "D15",
+      "D66",
+      "X71",
+      "X17",
+      "Y07"
+    ],
+    "mo_ta": "Quan hệ công chúng (PR): xây dựng hình ảnh tổ chức, truyền thông khủng hoảng, sự kiện."
   },
   {
     "stt": 33,
     "ma_nganh": "7320104",
     "ten": "Truyền thông đa phương tiện",
     "nhom": "Truyen-thong",
-    "tohop_mon": ["C00", "C03", "D01", "D14", "D15", "D66", "X71", "X17", "Y07"],
-    "mo_ta": "Đào tạo cử nhân truyền thông đa phương tiện"
+    "tohop_mon": [
+      "C00",
+      "C03",
+      "D01",
+      "D14",
+      "D15",
+      "D66",
+      "X71",
+      "X17",
+      "Y07"
+    ],
+    "mo_ta": "Truyền thông đa phương tiện: sản xuất nội dung, báo chí số, quay dựng và storytelling."
   },
   {
     "stt": 34,
     "ma_nganh": "7380101",
     "ten": "Luật",
     "nhom": "Luat",
-    "tohop_mon": ["C00", "C03", "D01", "D14", "D15", "D66", "X71", "X17", "Y07"],
-    "mo_ta": "Đào tạo cử nhân luật"
+    "tohop_mon": [
+      "C00",
+      "C03",
+      "D01",
+      "D14",
+      "D15",
+      "D66",
+      "X71",
+      "X17",
+      "Y07"
+    ],
+    "mo_ta": "Luật học: pháp luật dân sự, hình sự, hiến pháp và hành chính; hành nghề luật sư/tư vấn pháp lý."
   },
   {
     "stt": 35,
     "ma_nganh": "7380107",
     "ten": "Luật Kinh tế",
     "nhom": "Luat",
-    "tohop_mon": ["C00", "C03", "D01", "D14", "D15", "D66", "X71", "X17", "Y07"],
-    "mo_ta": "Đào tạo cử nhân luật kinh tế"
+    "tohop_mon": [
+      "C00",
+      "C03",
+      "D01",
+      "D14",
+      "D15",
+      "D66",
+      "X71",
+      "X17",
+      "Y07"
+    ],
+    "mo_ta": "Luật Kinh tế: doanh nghiệp, đầu tư, thương mại, lao động và giải quyết tranh chấp kinh doanh."
   },
   {
     "stt": 36,
     "ma_nganh": "7220201",
     "ten": "Ngôn ngữ Anh",
     "nhom": "Ngon-ngu",
-    "tohop_mon": ["A01", "D01", "D14", "D15", "X78", "X25", "X26"],
-    "mo_ta": "Đào tạo cử nhân ngôn ngữ Anh"
+    "tohop_mon": [
+      "A01",
+      "D01",
+      "D14",
+      "D15",
+      "X78",
+      "X25",
+      "X26"
+    ],
+    "mo_ta": "Ngôn ngữ Anh: biên - phiên dịch, giao tiếp quốc tế, văn hóa Anh - Mỹ và ứng dụng trong kinh tế."
   },
   {
     "stt": 37,
     "ma_nganh": "7810201",
     "ten": "Quản trị khách sạn",
     "nhom": "Du-lich",
-    "tohop_mon": ["A00", "A01", "C00", "C03", "D01", "D14", "D15", "X25", "Y07"],
-    "mo_ta": "Đào tạo cử nhân quản trị khách sạn"
+    "tohop_mon": [
+      "A00",
+      "A01",
+      "C00",
+      "C03",
+      "D01",
+      "D14",
+      "D15",
+      "X25",
+      "Y07"
+    ],
+    "mo_ta": "Quản trị khách sạn: lễ tân, buồng phòng, F&B, chất lượng dịch vụ lưu trú 4-5 sao."
   },
   {
     "stt": 38,
     "ma_nganh": "7810202",
     "ten": "Quản trị nhà hàng và dịch vụ ăn uống",
     "nhom": "Du-lich",
-    "tohop_mon": ["A00", "A01", "C00", "C03", "D01", "D14", "D15", "X25", "Y07"],
-    "mo_ta": "Đào tạo cử nhân quản trị nhà hàng và dịch vụ ăn uống"
+    "tohop_mon": [
+      "A00",
+      "A01",
+      "C00",
+      "C03",
+      "D01",
+      "D14",
+      "D15",
+      "X25",
+      "Y07"
+    ],
+    "mo_ta": "Quản trị nhà hàng và dịch vụ ăn uống: vận hành nhà hàng, an toàn thực phẩm, trải nghiệm khách hàng."
   },
   {
     "stt": 39,
     "ma_nganh": "7810103",
     "ten": "Quản trị dịch vụ du lịch và lữ hành",
     "nhom": "Du-lich",
-    "tohop_mon": ["A00", "A01", "C00", "C03", "D01", "D14", "D15", "X25", "Y07"],
-    "mo_ta": "Đào tạo cử nhân quản trị dịch vụ du lịch và lữ hành"
+    "tohop_mon": [
+      "A00",
+      "A01",
+      "C00",
+      "C03",
+      "D01",
+      "D14",
+      "D15",
+      "X25",
+      "Y07"
+    ],
+    "mo_ta": "Quản trị du lịch và lữ hành: thiết kế tour, điều hành, marketing điểm đến và phát triển bền vững."
   },
   {
     "stt": 40,
     "ma_nganh": "7580101",
     "ten": "Kiến trúc",
     "nhom": "Xay-dung",
-    "tohop_mon": ["A00", "C01", "D01", "V00", "V01", "X06", "X56"],
-    "mo_ta": "Đào tạo kiến trúc sư"
+    "tohop_mon": [
+      "A00",
+      "C01",
+      "D01",
+      "V00",
+      "V01",
+      "X06",
+      "X56"
+    ],
+    "mo_ta": "Kiến trúc: thiết kế công trình, mỹ thuật công trình, quy hoạch không gian và pháp lý xây dựng."
   },
   {
     "stt": 41,
     "ma_nganh": "7580201",
     "ten": "Kỹ thuật xây dựng",
     "nhom": "Xay-dung",
-    "tohop_mon": ["A00", "A01", "A02", "A03", "C03", "D01", "D07", "X05", "X06"],
-    "mo_ta": "Đào tạo kỹ sư xây dựng"
+    "tohop_mon": [
+      "A00",
+      "A01",
+      "A02",
+      "A03",
+      "C03",
+      "D01",
+      "D07",
+      "X05",
+      "X06"
+    ],
+    "mo_ta": "Kỹ thuật xây dựng: kết cấu, thi công, quản lý dự án xây dựng dân dụng và công nghiệp."
   },
   {
     "stt": 42,
     "ma_nganh": "7580302",
     "ten": "Quản lý xây dựng",
     "nhom": "Xay-dung",
-    "tohop_mon": ["A02", "A03", "C03", "D01", "D07", "X05", "X06"],
-    "mo_ta": "Đào tạo kỹ sư quản lý xây dựng"
+    "tohop_mon": [
+      "A02",
+      "A03",
+      "C03",
+      "D01",
+      "D07",
+      "X05",
+      "X06"
+    ],
+    "mo_ta": "Quản lý xây dựng: dự toán, hợp đồng, tiến độ, an toàn và chất lượng công trình."
   },
   {
     "stt": 43,
     "ma_nganh": "7580205",
     "ten": "Kỹ thuật xây dựng công trình giao thông",
     "nhom": "Xay-dung",
-    "tohop_mon": ["A02", "A03", "C03", "D01", "D07", "X05", "X06"],
-    "mo_ta": "Đào tạo kỹ sư xây dựng công trình giao thông"
+    "tohop_mon": [
+      "A02",
+      "A03",
+      "C03",
+      "D01",
+      "D07",
+      "X05",
+      "X06"
+    ],
+    "mo_ta": "Kỹ thuật xây dựng công trình giao thông: đường bộ, cầu, hầm và hạ tầng giao thông."
   },
   {
     "stt": 44,
     "ma_nganh": "7850101",
     "ten": "Quản lý tài nguyên và môi trường",
     "nhom": "Moi-truong",
-    "tohop_mon": ["A00", "A02", "B00", "C03", "C04", "C08", "D01", "D66", "X05"],
-    "mo_ta": "Đào tạo cử nhân quản lý tài nguyên và môi trường"
+    "tohop_mon": [
+      "A00",
+      "A02",
+      "B00",
+      "C03",
+      "C04",
+      "C08",
+      "D01",
+      "D66",
+      "X05"
+    ],
+    "mo_ta": "Quản lý tài nguyên và môi trường: đánh giá tác động môi trường, quản lý chất thải và phát triển bền vững."
   },
   {
     "stt": 45,
     "ma_nganh": "7850103",
     "ten": "Quản lý đất đai",
     "nhom": "Moi-truong",
-    "tohop_mon": ["A00", "A02", "B00", "C03", "C04", "C08", "D01", "D66", "X05"],
-    "mo_ta": "Đào tạo cử nhân quản lý đất đai"
+    "tohop_mon": [
+      "A00",
+      "A02",
+      "B00",
+      "C03",
+      "C04",
+      "C08",
+      "D01",
+      "D66",
+      "X05"
+    ],
+    "mo_ta": "Quản lý đất đai: pháp luật đất đai, định giá, quy hoạch sử dụng đất và cấp giấy chứng nhận."
   }
 ]

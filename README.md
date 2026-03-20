@@ -106,7 +106,7 @@ Vector index: **Nganh.embedding** (1536 chiều, cosine) dùng cho similarity se
 
 ### 1. Chuẩn bị dữ liệu (Offline)
 
-1. Trích xuất dữ liệu từ PDF/DOCX → lưu JSON tại `data/processed/`.
+1. Trích xuất dữ liệu từ PDF/DOCX → lưu JSON tại `data/processed/`. Điểm chuẩn đợt 1 năm 2025 căn cứ **Thông báo 227/TB-ĐHNCT (22/8/2025)**; mã ngành **Trí tuệ nhân tạo** theo thông báo này là **7480207** (đồng bộ `nganh_hoc.json` + `diem_chuan.json`).
 2. Chạy **`python scripts/seed_neo4j.py`** (từ thư mục gốc): tạo nodes, relationships, embeddings và Vector Index trong Neo4j. Script đọc: `phuong_thuc.json`, `tohop_mon.json`, `nganh_hoc.json`, `diem_chuan.json`, `hoc_bong.json` (nếu có).
 
 ### 2. Hỏi đáp (Online)

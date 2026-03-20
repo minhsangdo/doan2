@@ -2,46 +2,46 @@
   {
     "ma_pt": "301",
     "ten": "Xét tuyển thẳng",
-    "mo_ta": "Áp dụng cho các đối tượng được quy định tại Điều 8 của Quy chế tuyển sinh trình độ đại học của Bộ GD&ĐT."
+    "mo_ta": "Mã phương thức 301. Áp dụng thí sinh đủ điều kiện theo Điều 8 Quy chế tuyển sinh đại học (thí sinh đoạt giải Olympic, HSG quốc gia, chứng chỉ quốc tế theo quy định từng năm, v.v.). Hồ sơ và danh mục đối tượng xem Đề án tuyển sinh chính thức của ĐH Nam Cần Thơ."
   },
   {
     "ma_pt": "100",
     "ten": "Xét điểm kỳ thi THPT năm 2025",
-    "mo_ta": "Điểm xét tuyển (ĐXT) = Điểm Môn 1 + Môn 2 + Môn 3 + Điểm ưu tiên. Dựa trên kết quả thi tốt nghiệp THPT năm 2025."
+    "mo_ta": "Mã 100. Điểm xét tuyển (ĐXT) = Điểm môn 1 + môn 2 + môn 3 (theo tổ hợp đăng ký) + điểm ưu tiên (nếu có). Dùng kết quả thi tốt nghiệp THPT năm 2025. Thí sinh chọn tổ hợp phù hợp ngành đăng ký."
   },
   {
     "ma_pt": "200",
     "ten": "Xét tuyển theo kết quả học tập THPT (học bạ)",
-    "mo_ta": "ĐXT = Điểm Môn 1 + Môn 2 + Môn 3 + Điểm ưu tiên. Dựa vào tổ hợp 3 môn cả năm lớp 12."
+    "mo_ta": "Mã 200. ĐXT = tổng điểm trung bình cả năm lớp 12 của 3 môn trong tổ hợp xét tuyển (theo quy đổi của trường) + điểm ưu tiên. Không dùng điểm thi THPT làm thành phần chính; phù hợp thí sinh có học lực ổn định cả năm."
   },
   {
     "ma_pt": "407",
     "ten": "Xét tuyển kết hợp điểm thi THPT 2025 với kết quả học tập THPT (học bạ)",
-    "mo_ta": "ĐXT = Điểm Môn 1 + Môn 2 + Môn 3 + Điểm ưu tiên. Kết hợp điểm thi THPT và học bạ."
+    "mo_ta": "Mã 407. Kết hợp điểm thi THPT và điểm học bạ theo tỷ lệ/công thức quy định trong Đề án tuyển sinh DNC năm 2025. ĐXT vẫn gồm 3 môn theo tổ hợp + ưu tiên; chi tiết từng ngành xem mục phương thức trên hệ thống của Bộ GD&ĐT và trang tuyển sinh DNC."
   },
   {
     "ma_pt": "409",
     "ten": "Xét tuyển kết hợp điểm thi THPT với chứng chỉ quốc tế",
-    "mo_ta": "ĐXT = Điểm Môn 1 + Môn 2 + Môn 3 + Điểm ưu tiên. Sử dụng chứng chỉ quốc tế kết hợp điểm thi THPT."
+    "mo_ta": "Mã 409. Sử dụng điểm thi THPT kết hợp chứng chỉ ngoại ngữ/chứng chỉ quốc tế được Bộ GD&ĐT hoặc trường công nhận (IELTS, TOEFL, chứng chỉ khác theo danh mục năm 2025). Điều kiện cụ thể và quy đổi điểm xem Đề án tuyển sinh."
   },
   {
     "ma_pt": "410",
     "ten": "Xét tuyển học bạ kết hợp với chứng chỉ quốc tế",
-    "mo_ta": "ĐXT = Điểm Môn 1 + Môn 2 + Môn 3 + Điểm ưu tiên. Sử dụng chứng chỉ quốc tế kết hợp học bạ."
+    "mo_ta": "Mã 410. ĐXT dựa trên học bạ THPT (3 môn tổ hợp) kết hợp chứng chỉ quốc tế theo quy định. Phù hợp thí sinh có năng lực ngoại ngữ/chứng chỉ được công nhận nhưng muốn xét theo nền học bạ."
   },
   {
     "ma_pt": "402",
     "ten": "Xét tuyển theo kết quả kỳ thi đánh giá năng lực của các trường ĐH",
-    "mo_ta": "Áp dụng kết quả từ: Đại học Quốc gia TP.HCM, Đại học Cần Thơ và các trường đại học khác tổ chức."
+    "mo_ta": "Mã 402. Sử dụng điểm thi ĐGNL/ĐGTD do ĐHQG TP.HCM, ĐH Cần Thơ hoặc các đơn vị được phép tổ chức. Điểm trúng tuyển được quy đổi về thang tương ứng phương thức THPT theo thông báo của trường (xem TB điểm chuẩn đợt 1 năm 2025)."
   },
   {
     "ma_pt": "417",
     "ten": "Sử dụng kết quả kỳ thi V-SAT do đơn vị khác tổ chức",
-    "mo_ta": "Xét tuyển dựa trên kết quả thi V-SAT."
+    "mo_ta": "Mã 417. Xét theo điểm bài thi V-SAT (thang điểm tối đa theo quy định năm 2025, ví dụ 450). Điểm trúng tuyển ngành được quy đổi và công bố kèm các phương thức khác trong thông báo điểm chuẩn của DNC."
   },
   {
     "ma_pt": "411",
     "ten": "Xét tuyển thí sinh tốt nghiệp THPT nước ngoài",
-    "mo_ta": "Dành cho thí sinh tốt nghiệp THPT tại nước ngoài."
+    "mo_ta": "Mã 411. Dành cho thí sinh hoàn thành chương trình THPT tại nước ngoài, có hồ sơ công nhận tương đương theo quy chế. Hồ sơ, quy đổi điểm và lịch nộp xem hướng dẫn tuyển sinh quốc tế trên website trường."
   }
 ]
