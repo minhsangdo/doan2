@@ -298,10 +298,13 @@ class Neo4jClient:
 
     def get_all_nganh(self) -> List[Dict]:
         """Get all majors with scores."""
+        # collect() trong RETURN cùng ORDER BY n.stt gây lỗi Neo4j 5.x (aggregation scope).
+        # Gom tổ hợp môn ở WITH trước, RETURN sau mới ORDER BY n.stt được.
         query = """
         MATCH (n:Nganh)
         OPTIONAL MATCH (n)-[:HAS_SCORE]->(d:DiemChuan)
         OPTIONAL MATCH (n)-[:USES_COMBO]->(t:TohopMon)
+        WITH n, d, collect(DISTINCT t.ma_tohop) AS tohop_mon
         RETURN n.ma_nganh AS ma_nganh,
                n.ten AS ten,
                n.nhom AS nhom,
@@ -310,8 +313,8 @@ class Neo4jClient:
                d.diem_hocba AS diem_hocba,
                d.diem_dgnl AS diem_dgnl,
                d.diem_vsat AS diem_vsat,
-               collect(DISTINCT t.ma_tohop) AS tohop_mon,
-               coalesce(n.search_count, 0) as search_count
+               tohop_mon,
+               coalesce(n.search_count, 0) AS search_count
         ORDER BY n.stt
         """
         return self.run_query(query)
