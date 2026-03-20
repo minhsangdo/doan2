@@ -755,7 +755,7 @@ export default function App() {
       {/* Sidebar */}
       <aside 
         className={`${
-          isSidebarOpen ? 'translate-x-0 w-80' : '-translate-x-full w-0'
+          isSidebarOpen ? 'translate-x-0 w-[85vw] sm:w-80' : '-translate-x-full w-0'
         } fixed lg:static inset-y-0 left-0 z-40 bg-white/80 backdrop-blur-xl border-r border-slate-200/60 shadow-[4px_0_24px_rgba(0,0,0,0.02)] transition-all duration-300 ease-in-out flex flex-col`}
       >
         <div className="p-6 flex flex-col items-center border-b border-slate-100">
@@ -1163,7 +1163,7 @@ export default function App() {
                   }
                 }}
                 placeholder="Ví dụ: Điểm chuẩn ngành Y khoa là bao nhiêu?"
-                className="flex-1 resize-none bg-transparent border-none py-3 pl-4 pr-[100px] focus:outline-none focus:ring-0 min-h-[48px] max-h-[160px] text-[15px] placeholder-slate-400 shadow-none appearance-none"
+                className="flex-1 resize-none bg-transparent border-none py-3 pl-4 pr-[88px] sm:pr-[100px] focus:outline-none focus:ring-0 min-h-[48px] max-h-[160px] text-[15px] placeholder-slate-400 shadow-none appearance-none"
                 rows="1"
                 disabled={isLoading}
               />
