@@ -301,7 +301,7 @@ Truy cập: **http://localhost:5173/**
 
 - **Dockerfile** ở thư mục gốc: build React (`npm run build`) + chạy FastAPI trên cổng **7860**, phục vụ giao diện từ `/` và API từ `/api`.
 - Trên Space: **Settings → Secrets** thêm `NEO4J_URI`, `NEO4J_USER`, `NEO4J_PASSWORD`, `OPENAI_API_KEY` (Gemini), `FRONTEND_URL` = URL Space.
-- **Tự nạp Neo4j khi trống:** mặc định bật — lần khởi động đầu (hoặc DB không có node `Nganh`), backend chạy `GraphBuilder` nền từ `data/processed`. Tắt: Secret `KG_AUTO_SEED`=`false`. Theo dõi: `GET /api/health` trả `nganh_count`.
+- **Tự nạp Neo4j:** mặc định bật — nếu số node `Nganh` bằng 0 hoặc **dưới 40** (seed dở, ví dụ còn 4 ngành), backend rebuild đầy đủ từ `data/processed`. Đã đủ từ 40 ngành trở lên thì bỏ qua. Tuỳ chỉnh ngưỡng: `KG_MIN_NGANH_COMPLETE` (vd `45`). Tắt: `KG_AUTO_SEED`=`false`. Theo dõi: `GET /api/health` → `nganh_count`.
 - **Quên mật khẩu trên HF:** SMTP Gmail (`MAIL_*`) thường **bị treo/chặn** trong Space. Hãy dùng **[Resend](https://resend.com)** (miễn phí): tạo API key → Secret `RESEND_API_KEY`. Tuỳ chọn `RESEND_FROM` (mặc định `DNC Chatbot <onboarding@resend.dev>`; gửi đại trà cần verify domain trên Resend).
 - **GitHub Actions**: workflow `.github/workflows/deploy-hf-space.yml` chỉ copy whitelist (`backend/`, `frontend/`, `data/processed/`, `scripts/`, `Dockerfile`, `.dockerignore`, `deploy/hf-README.md` → `README.md` trên Space). Cần secret repo **`HF_TOKEN`** (token Hugging Face có quyền ghi Space).
 

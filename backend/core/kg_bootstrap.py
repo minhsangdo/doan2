@@ -29,8 +29,10 @@ def resolved_kg_data_dir() -> str:
 
 def background_seed_neo4j_if_empty() -> None:
     """
-    Nếu Neo4j không có node Nganh → chạy GraphBuilder (toàn bộ từ JSON).
-    Gọi từ thread pool khi startup để không chặn uvicorn/HF health.
+    Nếu Neo4j trống hoặc **thiếu ngành** (seed dở, còn vài node) → chạy GraphBuilder.
+
+    Mặc định: coi là đủ dữ liệu khi có >= 40 node Nganh (DNC ~45 ngành).
+    Tuỳ chỉnh: KG_MIN_NGANH_COMPLETE=45
 
     Tắt: KG_AUTO_SEED=0 | false | off
     """
@@ -40,6 +42,8 @@ def background_seed_neo4j_if_empty() -> None:
         return
 
     try:
+        min_complete = int(os.getenv("KG_MIN_NGANH_COMPLETE", "40").strip() or "40")
+
         from core.neo4j_client import get_neo4j_client
 
         db = get_neo4j_client()
@@ -48,15 +52,25 @@ def background_seed_neo4j_if_empty() -> None:
             return
         r = db.run_query("MATCH (n:Nganh) RETURN count(n) AS c")
         cnt = int(r[0]["c"]) if r else 0
-        if cnt > 0:
-            logger.info("Neo4j đã có %s ngành — không tự nạp lại.", cnt)
+        if cnt >= min_complete:
+            logger.info(
+                "Neo4j đã có %s ngành (ngưỡng đủ: %s) — không tự nạp lại.",
+                cnt,
+                min_complete,
+            )
             return
+        if cnt > 0:
+            logger.warning(
+                "Neo4j chỉ có %s ngành (< %s) — có thể seed dở/lỗi. Sẽ rebuild đầy đủ từ JSON.",
+                cnt,
+                min_complete,
+            )
         data_dir = resolved_kg_data_dir()
         if not os.path.isdir(data_dir):
             logger.warning("Không tìm thấy thư mục JSON: %s — không tự nạp KG.", data_dir)
             return
         logger.info(
-            "Neo4j trống — bắt đầu GraphBuilder từ %s (nền, có thể vài phút; cần OPENAI_API_KEY).",
+            "Bắt đầu GraphBuilder từ %s (nền, có thể vài phút; cần OPENAI_API_KEY).",
             data_dir,
         )
         from knowledge.graph_builder import GraphBuilder
