@@ -297,9 +297,23 @@ Truy cập: **http://localhost:5173/**
 
 ---
 
+## Demo trực tuyến
+
+<div style="padding: 14px 16px; border-left: 4px solid #3b82f6; background: rgba(59,130,246,0.06); border-radius: 12px; margin: 14px 0;">
+  <div style="font-weight: 700; margin-bottom: 8px;">🔗 Demo trực tuyến</div>
+  <div style="line-height: 1.6;">
+    <b>Hugging Face Space:</b>
+    <a href="https://huggingface.co/spaces/minhsangdo/dnc-admission-chatbot" target="_blank" rel="noreferrer">https://huggingface.co/spaces/minhsangdo/dnc-admission-chatbot</a>
+  </div>
+  <div style="line-height: 1.6; margin-top: 6px; color: rgba(15,23,42,0.8);">
+    Truy cập link trên để sử dụng chatbot trực tiếp trên trình duyệt mà không cần cài đặt.
+  </div>
+</div>
+
 ## ☁️ Hugging Face Space (Docker)
 
 - **Dockerfile** ở thư mục gốc: build React (`npm run build`) + chạy FastAPI trên cổng **7860**, phục vụ giao diện từ `/` và API từ `/api`.
+- **Chạy trực tuyến:** [DNC Admission Chatbot](https://huggingface.co/spaces/minhsangdo/dnc-admission-chatbot)
 - Trên Space: **Settings → Secrets** thêm `NEO4J_URI`, `NEO4J_USER`, `NEO4J_PASSWORD`, `OPENAI_API_KEY` (Gemini), `FRONTEND_URL` = URL Space.
 - **Tự nạp Neo4j:** mặc định bật — nếu số node `Nganh` bằng 0 hoặc **dưới 40** (seed dở, ví dụ còn 4 ngành), backend rebuild đầy đủ từ `data/processed`. Đã đủ từ 40 ngành trở lên thì bỏ qua. Tuỳ chỉnh ngưỡng: `KG_MIN_NGANH_COMPLETE` (vd `45`). Tắt: `KG_AUTO_SEED`=`false`. Theo dõi: `GET /api/health` → `nganh_count`.
 - **Quên mật khẩu trên HF:** SMTP Gmail (`MAIL_*`) thường **bị treo/chặn** trong Space. Hãy dùng **[Resend](https://resend.com)** (miễn phí): tạo API key → Secret `RESEND_API_KEY`. Tuỳ chọn `RESEND_FROM` (mặc định `DNC Chatbot <onboarding@resend.dev>`; gửi đại trà cần verify domain trên Resend).
