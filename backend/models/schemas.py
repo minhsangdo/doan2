@@ -90,7 +90,11 @@ class MajorUpdateRequest(BaseModel):
     diem_hocba: Optional[float] = None
 
 class RebuildKGRequest(BaseModel):
+    """Xác nhận rebuild (đúng theo use case: confirm=True)."""
     confirm: bool = False
+    #: True = xóa + tạo ràng buộc + nạp lại toàn bộ từ `data/processed` (GraphBuilder).
+    #: False = chỉ xóa graph + constraints (legacy / thử nghiệm).
+    full_ingest: bool = True
 
 
 class AdminResponse(BaseModel):
