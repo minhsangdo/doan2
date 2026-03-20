@@ -125,10 +125,7 @@ const AdminDashboard = ({ token, onBack }) => {
   };
 
   const runRebuild = async () => {
-    if (!rebuildConfirm) {
-      setActionMsg({ type: 'err', text: 'Tick ô xác nhận trước khi rebuild (use case).' });
-      return;
-    }
+    if (!rebuildConfirm || rebuildBusy) return;
     setRebuildBusy(true);
     setActionMsg(null);
     try {
@@ -318,35 +315,64 @@ const AdminDashboard = ({ token, onBack }) => {
                   Xem / cập nhật ngành & điểm chuẩn; rebuild có bước xác nhận <code>confirm=true</code>.
                 </p>
 
+                {!loading && majors.length === 0 && (
+                  <div className="bg-blue-50 border border-blue-200 rounded-2xl p-4 text-sm text-blue-900 space-y-2">
+                    <p className="font-semibold">Neo4j đang trống (0 ngành) — chatbot chưa có dữ liệu để trả lời.</p>
+                    <ol className="list-decimal list-inside space-y-1 text-blue-800">
+                      <li>
+                        Tick <strong>ô xác nhận đầu tiên</strong> (bắt buộc), giữ tick <strong>Nạp đầy đủ từ JSON</strong>.
+                      </li>
+                      <li>Bấm <strong>Thực hiện rebuild</strong> và đợi (có thể vài phút — cần Secret <code>OPENAI_API_KEY</code> trên Space để tạo embedding).</li>
+                      <li>Tải lại trang hoặc chuyển tab rồi quay lại để thấy danh sách ngành.</li>
+                    </ol>
+                  </div>
+                )}
+
                 <div className="bg-amber-50 border border-amber-200 rounded-2xl p-5 space-y-3">
                   <h3 className="font-semibold text-amber-900 flex items-center gap-2">
                     <RefreshCw size={18} /> Rebuild Knowledge Graph
                   </h3>
-                  <label className="flex items-center gap-2 text-sm text-amber-900">
+                  <label className="flex items-start gap-3 text-sm text-amber-900 cursor-pointer">
                     <input
                       type="checkbox"
+                      className="mt-1 rounded border-amber-400"
                       checked={rebuildConfirm}
                       onChange={(e) => setRebuildConfirm(e.target.checked)}
                     />
-                    Tôi xác nhận thao tác rebuild (xóa dữ liệu graph theo lựa chọn bên dưới).
+                    <span>
+                      <span className="font-medium">Bước 1 — Xác nhận (bắt buộc):</span> Tôi hiểu thao tác này có thể{' '}
+                      <strong>xóa</strong> dữ liệu graph hiện tại và thay theo lựa chọn bên dưới.
+                    </span>
                   </label>
-                  <label className="flex items-center gap-2 text-sm text-amber-900">
+                  <label className="flex items-start gap-3 text-sm text-amber-900 cursor-pointer">
                     <input
                       type="checkbox"
+                      className="mt-1 rounded border-amber-400"
                       checked={rebuildFullIngest}
                       onChange={(e) => setRebuildFullIngest(e.target.checked)}
                     />
-                    Nạp đầy đủ từ JSON trong <code className="bg-amber-100 px-1 rounded">data/processed</code>{' '}
-                    (GraphBuilder)
+                    <span>
+                      <span className="font-medium">Bước 2 — Nạp dữ liệu:</span> Nạp đầy đủ từ JSON trong{' '}
+                      <code className="bg-amber-100 px-1 rounded">data/processed</code> (GraphBuilder). Nên bật khi DB
+                      trống hoặc cần làm mới toàn bộ.
+                    </span>
                   </label>
-                  <button
-                    type="button"
-                    disabled={rebuildBusy}
-                    onClick={runRebuild}
-                    className="px-4 py-2 rounded-xl bg-amber-600 text-white font-medium hover:bg-amber-700 disabled:opacity-50"
-                  >
-                    {rebuildBusy ? 'Đang xử lý…' : 'Thực hiện rebuild'}
-                  </button>
+                  <div className="flex flex-col sm:flex-row sm:items-center gap-3 pt-1">
+                    <button
+                      type="button"
+                      disabled={rebuildBusy || !rebuildConfirm}
+                      onClick={runRebuild}
+                      title={!rebuildConfirm ? 'Hãy tick ô xác nhận bước 1 trước' : undefined}
+                      className="px-4 py-2.5 rounded-xl bg-amber-600 text-white font-medium hover:bg-amber-700 disabled:opacity-45 disabled:cursor-not-allowed disabled:bg-amber-800/80"
+                    >
+                      {rebuildBusy ? 'Đang rebuild… (có thể vài phút)' : 'Thực hiện rebuild'}
+                    </button>
+                    {!rebuildConfirm && !rebuildBusy && (
+                      <span className="text-xs text-amber-800/90">
+                        Chưa tick xác nhận bước 1 → nút bị khóa để tránh bấm nhầm.
+                      </span>
+                    )}
+                  </div>
                 </div>
 
                 <div className="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center">
@@ -377,6 +403,20 @@ const AdminDashboard = ({ token, onBack }) => {
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-slate-100">
+                        {!loading && filteredMajors.length === 0 && (
+                          <tr>
+                            <td colSpan={6} className="px-4 py-12 text-center text-slate-500">
+                              {majors.length === 0 ? (
+                                <>
+                                  Chưa có ngành trong Neo4j. Thực hiện <strong>Rebuild</strong> ở khối phía trên (tick xác
+                                  nhận + nạp từ JSON).
+                                </>
+                              ) : (
+                                <>Không có ngành khớp ô tìm kiếm. Thử xóa bộ lọc.</>
+                              )}
+                            </td>
+                          </tr>
+                        )}
                         {filteredMajors.map((m) => (
                           <tr key={m.ma_nganh} className="hover:bg-slate-50">
                             <td className="px-3 py-2 font-mono text-xs">{m.ma_nganh}</td>

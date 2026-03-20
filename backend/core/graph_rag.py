@@ -168,7 +168,7 @@ class GraphRAGEngine:
             methods_data = self.db.run_query("MATCH (p:PhuongThuc) RETURN p.ma_pt as ma, p.ten as ten, p.mo_ta as mo_ta ORDER BY p.ma_pt")
             pt_list = [f"[{m['ma']}] {m['ten']}: {m['mo_ta']}" for m in methods_data]
             
-            part = f"""--- CÁC PHƯƠNG THỨC XÉT TUYỂN 2025 ---
+            part = f"""--- CÁC PHƯƠNG THỨC XÉT TUYỂN 2026 ---
 {chr(10).join(pt_list)}
 -----------------------
 """
