@@ -309,7 +309,7 @@ Chi tiết Secrets (Neo4j, `OPENAI_API_KEY` = Gemini, tự seed KG…): xem **`d
 |---|---|
 | **Sinh viên** | Đỗ Minh Sang |
 | **Trường / Đơn vị** | Đại học Nam Cần Thơ (DNC) — Khoa Công nghệ Thông tin |
-| **Niên khóa / năm** | 2024–2025 |
+| **Niên khóa / năm** | 2025–2026 |
 
 ---
 
