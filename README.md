@@ -1,306 +1,256 @@
 # 🎓 Hệ Thống Chatbot Tư Vấn Tuyển Sinh Đại Học Nam Cần Thơ (DNC) - 2025
 
-Đồ án xây dựng một Chatbot thông minh hỗ trợ tư vấn tuyển sinh đại học cho Trường Đại học Nam Cần Thơ (DNC), ứng dụng công nghệ **Graph RAG (Retrieval-Augmented Generation) kết hợp với cơ sở dữ liệu đồ thị Neo4j** để truy xuất thông tin chính xác, minh bạch và có tính liên kết cao.
+Đồ án xây dựng chatbot hỗ trợ **tư vấn tuyển sinh đại học** cho Trường Đại học Nam Cần Thơ (DNC), ứng dụng **Graph RAG (Retrieval-Augmented Generation)** kết hợp **Neo4j** để truy xuất tri thức có cấu trúc, hiển thị **nguồn tham chiếu (sources)** và gợi ý câu hỏi tiếp theo.
 
 ---
 
 ## Demo trực tuyến
 
-<div style="padding: 14px 16px; border-left: 4px solid #3b82f6; background: rgba(59,130,246,0.06); border-radius: 12px; margin: 14px 0;">
-  <div style="font-weight: 700; margin-bottom: 8px;">🔗 Demo trực tuyến</div>
-  <div style="line-height: 1.6;">
-    <b>Hugging Face Space:</b>
-    <a href="https://huggingface.co/spaces/minhsangdo/dnc-admission-chatbot" target="_blank" rel="noreferrer">https://huggingface.co/spaces/minhsangdo/dnc-admission-chatbot</a>
-  </div>
-  <div style="line-height: 1.6; margin-top: 6px; color: rgba(15,23,42,0.8);">
-    Truy cập link trên để sử dụng chatbot trực tiếp trên trình duyệt mà không cần cài đặt.
-  </div>
-</div>
+| | |
+|---|---|
+| **Hugging Face Space** | [https://huggingface.co/spaces/minhsangdo/dnc-admission-chatbot](https://huggingface.co/spaces/minhsangdo/dnc-admission-chatbot) |
 
---
+Mở link trên để dùng chatbot trên trình duyệt (không cần cài đặt local).
+
+---
 
 ## Tổng quan
-| Thành phần | Công nghệ | Mô tả |
-|------------|-----------|--------|
-| **Frontend** | React.js + Vite + Tailwind CSS | Giao diện chat, markdown, xác thực, lịch sử, ngành quan tâm, phản hồi, nhập giọng nói, Text-to-Speech |
-| **Backend** | FastAPI (Python 3.11) | API, JWT, Graph RAG, logic hỏi đáp |
-| **CSDL quan hệ** | SQLite `chat_history.db` | Người dùng, phiên chat, tin nhắn, ngành quan tâm, phản hồi |
-| **CSDL đồ thị** | Neo4j 5.x | Tri thức tuyển sinh phục vụ Graph RAG |
-| **AI** | Gemini API (LLM + embeddings) | Phân loại ý định, truy xuất ngữ cảnh, sinh câu trả lời dựa trên context |
 
-## Hình ảnh và sơ đồ
-Các sơ đồ (Kiến trúc, Use Case, ERD/DFD, Knowledge Graph) được vẽ bằng `draw.io`. Nếu bạn đã export ảnh (PNG/SVG) từ các file trong `docs/`, có thể nhúng trực tiếp vào README để hiển thị trên GitHub.
-
-## 🏗️ Kiến trúc hệ thống
-
-Hệ thống được thiết kế theo mô hình Client-Server kết hợp với Knowledge Graph và LLM:
-
-| Thành phần | Công nghệ | Mô tả |
-|------------|-----------|--------|
-| **Frontend** | React.js + Vite + Tailwind CSS | Giao diện chat, markdown, xác thực, lịch sử, ngành quan tâm, phản hồi, nhập giọng nói, Text-to-Speech |
-| **Backend** | FastAPI (Python 3.11) | API, JWT, Graph RAG, logic hỏi đáp |
-| **Database (RDBMS)** | SQLite `chat_history.db` | Người dùng, phiên chat, tin nhắn, ngành quan tâm, phản hồi |
-| **Graph DB** | Neo4j 5.x | Entities, Relationships, Embeddings cho Graph RAG |
-| **AI** | Gemini API (LLM + embeddings) | Phân loại ý định, embedding, truy xuất ngữ cảnh từ Neo4j, tổng hợp câu trả lời |
+| Thành phần | Chi tiết |
+|------------|----------|
+| **Bài toán** | Chatbot tư vấn tuyển sinh DNC: ngành đào tạo, điểm chuẩn, tổ hợp môn, phương thức xét tuyển, học bổng… |
+| **Giao diện** | React.js + Vite + Tailwind — `frontend/src/App.jsx` (chat, auth, lịch sử, favorites, feedback, giọng nói, TTS), `frontend/src/AdminDashboard.jsx` (admin) |
+| **Backend & Graph RAG** | FastAPI — `backend/main.py`; logic RAG tập trung tại `backend/core/graph_rag.py`, `backend/core/intent_classifier.py`, `backend/core/llm_client.py`, `backend/core/embeddings.py` |
+| **API** | REST dưới prefix `/api` — `backend/api/routes/chat.py`, `auth.py`, `admin.py` |
+| **CSDL đồ thị** | Neo4j 5.x — nodes/relationships ngành, điểm, tổ hợp, phương thức, học bổng; vector index trên embedding ngành |
+| **Embedding** | Gemini Embeddings API (cấu hình qua biến môi trường; mặc định trong code tương thích Gemini) |
+| **LLM chính** | Gemini (chat + phân loại ý định) — qua `backend/core/llm_client.py` |
+| **CSDL quan hệ** | SQLite `backend/chat_history.db` — người dùng, phiên chat, tin nhắn, ngành quan tâm, phản hồi |
+| **Nguồn dữ liệu tri thức** | JSON tại `data/processed/` (trích từ PDF/DOCX tuyển sinh, điểm chuẩn, học bổng…); seed vào Neo4j bằng `scripts/seed_neo4j.py` |
 
 ---
 
-## 📊 Cơ sở dữ liệu (SQLite) – 5 bảng
+## Tính năng
 
-Hệ thống sử dụng **5 bảng** trong file `chat_history.db`, liên kết với nhau như sau:
+### 1. Hỏi đáp Graph RAG
 
-### Sơ đồ quan hệ
+- Nhận câu hỏi từ giao diện React → `POST /api/chat/`.
+- **Phân loại ý định** (LLM), gồm intent **`hoc_bong`** khi hỏi về học bổng.
+- **Embedding** câu hỏi khi cần, **vector search** + **graph traversal** trên Neo4j; với `hoc_bong` có thể truy toàn bộ node `HocBong`.
+- **Gemini** sinh câu trả lời dựa trên context đã truy xuất; kèm **gợi ý câu hỏi** và **sources** từ Neo4j.
+- Lưu tin nhắn vào SQLite, trả về `bot_message_id` phục vụ feedback.
 
-```
-                         ┌─────────────┐
-                         │   users     │
-                         │  (id PK)   │
-                         └──────┬─────┘
-                                │
-          ┌─────────────────────┼─────────────────────┐
-          │                     │                     │
-          ▼                     ▼                     ▼
-┌──────────────────┐  ┌─────────────────────┐  ┌─────────────────────┐
-│ chat_sessions    │  │ user_favorite_      │  │ message_feedbacks    │
-│ user_id (FK)     │  │ majors (user_id FK) │  │ user_id (FK, null)  │
-└────────┬─────────┘  └─────────────────────┘  │ message_id (FK)     │
-         │ 1:N                                    └──────────┬──────────┘
-         ▼                                                   │
-┌──────────────────┐                                        │
-│ chat_messages    │◄───────────────────────────────────────┘
-│ session_id (FK)  │
-└──────────────────┘
-```
+### 2. Chuẩn bị & cập nhật tri thức (Knowledge Graph)
 
-### Mô tả từng bảng
+- Trích dữ liệu từ tài liệu nguồn → JSON trong `data/processed/`.
+- Điểm chuẩn đợt 1 năm 2025 căn cứ **Thông báo 227/TB-ĐHNCT (22/8/2025)** (đồng bộ `nganh_hoc.json`, `diem_chuan.json`, …).
+- Seed Neo4j: `python scripts/seed_neo4j.py` (tạo nodes, relationships, embeddings, vector index).
+- **Admin**: `POST /api/admin/rebuild` — rebuild pipeline tri thức (tùy chọn full ingest); trên HF Space có thể **tự bootstrap** khi graph trống/thiếu (xem `deploy/hf-README.md`).
 
-| # | Bảng | Khóa chính | Khóa ngoại | Mô tả |
-|---|------|------------|------------|--------|
-| 1 | **users** | id | — | Tài khoản: username, email, mật khẩu, khối thi, điểm dự kiến, reset password |
-| 2 | **chat_sessions** | id (UUID) | user_id → users.id | Phiên chat (user_id có thể null cho khách) |
-| 3 | **chat_messages** | id | session_id → chat_sessions.id | Tin nhắn user/bot trong từng phiên |
-| 4 | **user_favorite_majors** | id | user_id → users.id | Ngành học người dùng đã lưu (ma_nganh, ten_nganh). UNIQUE(user_id, ma_nganh) |
-| 5 | **message_feedbacks** | id | message_id → chat_messages.id, user_id → users.id | Đánh giá câu trả lời (rating: up/down). user_id nullable |
+### 3. Quản lý người dùng & xác thực
 
-### Quan hệ tóm tắt
+- Đăng ký, đăng nhập (JWT), `GET /api/auth/me`, cập nhật `PUT /api/auth/profile` (khối thi, điểm dự kiến…).
+- Quên mật khẩu: `POST /api/auth/forgot-password`, `POST /api/auth/reset-password` — email qua **Gmail SMTP** (local) hoặc **Resend** (khuyến nghị trên Hugging Face Space).
 
-- **users** ↔ **chat_sessions**: 1 user có nhiều phiên (N : 1).
-- **chat_sessions** ↔ **chat_messages**: 1 phiên có nhiều tin nhắn (1 : N).
-- **users** ↔ **user_favorite_majors**: 1 user có nhiều ngành quan tâm (1 : N).
-- **chat_messages** ↔ **message_feedbacks**: 1 tin nhắn có nhiều phản hồi (1 : N); **users** ↔ **message_feedbacks** (N : 1, user_id tùy chọn).
+### 4. Phiên chat, ngành quan tâm, phản hồi
 
----
+- Nhiều **phiên chat** theo user; lịch sử `GET /api/auth/history`.
+- **Ngành quan tâm**: `GET/POST /api/auth/favorites`, `DELETE /api/auth/favorites/{ma_nganh}`.
+- **Phản hồi chất lượng**: `POST /api/chat/feedback` (`message_id`, `rating`: `up` \| `down`).
 
-## 🧠 Sơ đồ tri thức (Knowledge Graph – Neo4j)
+### 5. Trải nghiệm đa phương tiện
 
-Mô hình đồ thị trong Neo4j (labels và quan hệ thực tế trong code):
+- **Nhập giọng nói**: Web Speech API (Chrome/Edge; HTTPS hoặc localhost).
+- **Text-to-Speech**: đọc câu trả lời (tiếng Việt).
 
-### Node types (labels)
+### 6. Trang quản trị (Admin)
 
-| Label | Mô tả | Số lượng (sau seed mẫu) |
-|-------|--------|-------------------------|
-| **Nganh** | Ngành đào tạo (ma_nganh, ten, nhom, mo_ta); có vector embedding | 45 |
-| **DiemChuan** | Điểm chuẩn 2025 (THPT, học bạ, ĐGNL, V-SAT) theo từng ngành | 45 |
-| **TohopMon** | Tổ hợp môn xét tuyển (ma_tohop, ten, cac_mon) | 41 |
-| **PhuongThuc** | Phương thức xét tuyển (ma_pt, ten, mo_ta) | 9 |
-| **NhomNganh** | Nhóm ngành (Y-Duoc, KT-CN, ...) | 10 |
-| **HocBong** | Học bổng và chính sách hỗ trợ (ma_hb, ten, mo_ta, dieu_kien, gia_tri, doi_tuong) | 8 |
+- Yêu cầu tài khoản **admin** (theo logic backend).
+- **Thống kê KG**: `GET /api/admin/stats`.
+- **Ngành tra cứu nhiều**: `GET /api/admin/stats/popular-majors`.
+- **Lịch sử chat toàn hệ thống**: `GET /api/admin/chat-history`.
+- **Danh sách / cập nhật ngành**: `GET /api/admin/majors`, `PUT /api/admin/majors/{ma_nganh}`.
+- **Rebuild KG**: `POST /api/admin/rebuild`.
 
-### Relationships
+### 7. API & health
 
-- `(Nganh)-[:HAS_SCORE]->(DiemChuan)`
-- `(Nganh)-[:USES_COMBO]->(TohopMon)`
-- `(Nganh)-[:BELONGS_TO]->(NhomNganh)`
-- `(Nganh)-[:ACCEPTS_METHOD]->(PhuongThuc)`
-
-Vector index: **Nganh.embedding** (1536 chiều, cosine) dùng cho similarity search khi tư vấn ngành/điểm chuẩn.
+- `GET /` — kiểm tra nhanh (tùy cấu hình static/build).
+- `GET /api/health` — trạng thái backend (kèm thông tin KG khi có).
+- Swagger/OpenAPI: `/docs` (khi chạy Uvicorn).
 
 ---
 
-## 🔄 Luồng xử lý chính
+## Kiến trúc
 
-### 1. Chuẩn bị dữ liệu (Offline)
-
-1. Trích xuất dữ liệu từ PDF/DOCX → lưu JSON tại `data/processed/`. Điểm chuẩn đợt 1 năm 2025 căn cứ **Thông báo 227/TB-ĐHNCT (22/8/2025)**; mã ngành **Trí tuệ nhân tạo** theo thông báo này là **7480207** (đồng bộ `nganh_hoc.json` + `diem_chuan.json`).
-2. Chạy **`python scripts/seed_neo4j.py`** (từ thư mục gốc): tạo nodes, relationships, embeddings và Vector Index trong Neo4j. Script đọc: `phuong_thuc.json`, `tohop_mon.json`, `nganh_hoc.json`, `diem_chuan.json`, `hoc_bong.json` (nếu có).
-
-### 2. Hỏi đáp (Online)
-
-1. User gửi câu hỏi → POST `/api/chat/`.
-2. Backend: phân loại ý định (LLM) — gồm **hoc_bong** khi hỏi về học bổng.
-3. Embedding câu hỏi (nếu cần), vector search + graph traversal trên Neo4j; với intent **hoc_bong** thì lấy toàn bộ node HocBong.
-4. Xây dựng context (Graph RAG) → Gemini sinh câu trả lời + gợi ý câu hỏi.
-5. Lưu tin nhắn vào SQLite, trả response (kèm `bot_message_id` cho phản hồi).
-
----
-
-## Tiến độ dự án
-
-### Đã hoàn thành ở mức sử dụng được
-- Graph RAG pipeline gồm: phân loại ý định, tạo embedding khi cần, truy xuất context từ Neo4j (vector search + graph traversal) và sinh câu trả lời bằng LLM.
-- Tích hợp intent `hoc_bong` để truy xuất danh sách học bổng từ Knowledge Graph.
-- Quản lý người dùng: đăng ký, đăng nhập/đăng xuất, quên mật khẩu, cập nhật hồ sơ cơ bản phục vụ tư vấn cá nhân hóa.
-- Lưu lịch sử hội thoại theo phiên và quản lý tin nhắn trong SQLite.
-- Lưu ngành quan tâm (favorites) và thu thập phản hồi (feedback) cho câu trả lời của chatbot.
-- Nhập giọng nói (Web Speech API) và nghe đọc câu trả lời (TTS).
-
-### Đang tiếp tục hoàn thiện
-- Tối ưu chất lượng truy xuất ngữ cảnh và ràng buộc sinh câu trả lời theo `sources`.
-- Hoàn thiện phần quản trị (thống kê/rebuild) và mở rộng khả năng cập nhật dữ liệu tri thức theo nhu cầu.
-
-## Tính năng đã có
-
-### 1. Quản lý người dùng & xác thực
-
-- Đăng ký, đăng nhập (JWT).
-- Quên mật khẩu: gửi link khôi phục qua email.
-- Hồ sơ: cập nhật khối thi, điểm dự kiến (phục vụ gợi ý ngành).
-
-### 2. Chat & tư vấn tuyển sinh
-
-- Tư vấn **45 ngành đào tạo**, mã ngành, tổ hợp môn.
-- Tra cứu **điểm chuẩn năm 2025** theo hình thức xét tuyển.
-- **9 phương thức xét tuyển**, thủ tục nhập học.
-- **Học bổng và chính sách hỗ trợ**: học bổng tân sinh viên (20 triệu, 40%, 30%), học bổng sinh viên chính quy (hoàn cảnh khó khăn, xuất sắc, tốt nghiệp xuất sắc, Hội khuyến học/doanh nghiệp), thông tin liên hệ Phòng QLSV & Tư vấn tuyển sinh.
-- **Gợi ý câu hỏi** sau mỗi câu trả lời.
-- **Nguồn tham chiếu (Sources)** hiển thị minh bạch từ Neo4j.
-
-### 3. Quản lý trò chuyện
-
-- Lưu nhiều **phiên chat** theo tài khoản; xem lại lịch sử.
-- Tin nhắn lưu trong `chat_messages` theo `chat_sessions`.
-
-### 4. Ngành quan tâm (Favorites)
-
-- **Lưu ngành** (mã ngành, tên ngành) vào danh sách quan tâm (bảng `user_favorite_majors`).
-- Xem danh sách, xóa ngành đã lưu (sidebar khi đăng nhập).
-- API: GET/POST `/api/auth/favorites`, DELETE `/api/auth/favorites/{ma_nganh}`.
-
-### 5. Phản hồi câu trả lời (Feedback)
-
-- Nút **Hữu ích** / **Báo sai** dưới tin nhắn bot (bảng `message_feedbacks`).
-- Gửi đánh giá kèm `message_id`; có thể gửi khi chưa đăng nhập (user_id nullable).
-- API: POST `/api/chat/feedback` (body: `message_id`, `rating`: 'up' | 'down').
-
-### 6. Trải nghiệm đa phương tiện
-
-- **Nhập bằng giọng nói**: Web Speech API (Chrome/Edge, localhost hoặc HTTPS), xin quyền microphone.
-- **Text-to-Speech**: Đọc nội dung câu trả lời (tiếng Việt).
-
-### 7. Admin
-
-- Thống kê Neo4j, rebuild graph, xem lịch sử chat, quản lý ngành (tùy cấu hình).
-
----
-
-## Kiến trúc hiện tại
 ```text
-Thí sinh/Người dùng
-      |
-      v
-Frontend (React/Vite)
-      |
-      v  (HTTP /api/chat/)
-Backend (FastAPI)
-      |
-      +--> Intent classifier (Gemini)
-      +--> Embedding câu hỏi (Gemini embeddings)
-      +--> Truy vấn Neo4j (vector_search + graph traversal)
-      +--> Sinh câu trả lời (Gemini) dựa trên context
-      +--> Lưu dữ liệu hội thoại vào SQLite
-      v
-Trả lời về Frontend (answer + sources + suggested_questions)
+Người dùng / Admin
+        │
+        ▼
+React (Vite) — App.jsx / AdminDashboard.jsx
+        │
+        │  HTTP  /api/chat, /api/auth, /api/admin
+        ▼
+FastAPI (backend/main.py)
+        │
+        ├── Intent classifier (Gemini)
+        ├── Embeddings (Gemini API)
+        ├── Graph RAG (backend/core/graph_rag.py)
+        │      └── Neo4j: vector search + graph traversal
+        ├── LLM sinh câu trả lời (Gemini)
+        │
+        ├──▶ SQLite (backend/chat_history.db)
+        │      users, chat_sessions, chat_messages,
+        │      user_favorite_majors, message_feedbacks
+        │
+        └──▶ Neo4j
+               Nganh, DiemChuan, TohopMon, PhuongThuc,
+               NhomNganh, HocBong + relationships
 ```
 
-## 📁 Cấu trúc thư mục
+---
+
+## Cấu trúc thư mục
 
 ```text
 doan2_chatboxtuyensinh_DoMinhSang/
-├── backend/                    # FastAPI
-│   ├── api/                   # Routes: chat, auth, admin
-│   ├── core/                  # Graph RAG, LLM, Neo4j, Security, DB
-│   ├── knowledge/             # graph_builder (đọc JSON, tạo Neo4j)
-│   ├── models/                # SQLAlchemy models, Pydantic schemas
-│   ├── main.py                # Entrypoint
-│   ├── migrate_db.py          # Migration SQLite (bảng + cột)
-│   └── chat_history.db        # SQLite (5 bảng)
-├── frontend/                   # React + Vite + Tailwind
+├── backend/
+│   ├── api/
+│   │   ├── routes/
+│   │   │   ├── chat.py          # POST /api/chat, feedback
+│   │   │   ├── auth.py          # register, login, profile, favorites, forgot/reset password
+│   │   │   └── admin.py         # stats, rebuild, majors, chat-history
+│   │   └── middleware.py
+│   ├── core/
+│   │   ├── graph_rag.py         # Pipeline Graph RAG
+│   │   ├── intent_classifier.py
+│   │   ├── llm_client.py
+│   │   ├── embeddings.py
+│   │   ├── neo4j_client.py
+│   │   ├── database.py
+│   │   ├── security.py
+│   │   ├── email_utils.py
+│   │   └── kg_bootstrap.py
+│   ├── knowledge/
+│   │   └── graph_builder.py     # Đọc JSON → Neo4j
+│   ├── models/                  # SQLAlchemy + Pydantic schemas
+│   ├── main.py                  # FastAPI entrypoint
+│   ├── migrate_db.py
+│   └── chat_history.db          # SQLite (runtime)
+├── frontend/
 │   ├── src/
-│   │   ├── App.jsx            # Chat, auth, favorites, feedback, voice, TTS
-│   │   └── AdminDashboard.jsx
+│   │   ├── App.jsx
+│   │   ├── AdminDashboard.jsx
+│   │   └── ...
 │   └── public/
 ├── data/
-│   ├── raw/                   # PDF/DOCX nguồn (diem chuan, tuyen sinh, hoc bong...)
-│   └── processed/             # JSON: diem_chuan, nganh_hoc, tohop_mon, phuong_thuc, hoc_bong
-├── docs/                       # Hướng dẫn (vd: thêm dữ liệu học bổng)
+│   ├── raw/                     # PDF/DOCX nguồn
+│   └── processed/               # JSON: diem_chuan, nganh_hoc, tohop_mon, phuong_thuc, hoc_bong
+├── docs/                        # Hướng dẫn bổ sung (ví dụ học bổng)
 ├── scripts/
-│   └── seed_neo4j.py          # Seed toàn bộ graph từ data/processed/
+│   └── seed_neo4j.py            # Seed Neo4j từ data/processed/
 ├── deploy/
-│   └── hf-README.md           # README + YAML metadata cho Hugging Face Space
-├── Dockerfile                 # Build HF Space: frontend static + backend :7860
-├── README.md
-└── docker-compose.yml         # Neo4j + backend + frontend (dev)
+│   └── hf-README.md             # Gợi ý Secrets/metadata Hugging Face Space
+├── Dockerfile                   # Build static React + FastAPI (port 7860 cho HF)
+├── docker-compose.yml           # Neo4j + dev stack
+├── .env.example
+└── README.md
 ```
 
 ---
 
-## 📊 Dataset
+## Cơ sở dữ liệu
 
-Dữ liệu trích từ văn bản chính thức DNC:
+### SQLite (`backend/chat_history.db`)
 
-| Nguồn | Nội dung | File JSON (trong `data/processed/`) |
-|-------|----------|--------------------------------------|
-| Thông báo điểm chuẩn 2025, Thông tin tuyển sinh 2025, Kế hoạch đồ án | Ngành, điểm chuẩn, tổ hợp môn, phương thức | `diem_chuan.json`, `nganh_hoc.json`, `tohop_mon.json`, `phuong_thuc.json` |
-| **HỌC BỔNG ĐẠI HỌC NAM CẦN THƠ.pdf** | Học bổng tân sinh viên, sinh viên chính quy, liên hệ | `hoc_bong.json` |
+| Bảng | Mô tả |
+|------|--------|
+| **users** | Tài khoản, email, mật khẩu hash, khối thi, điểm dự kiến, token reset… |
+| **chat_sessions** | Phiên chat (UUID), `user_id` có thể null (khách) |
+| **chat_messages** | Tin nhắn user/bot theo `session_id` |
+| **user_favorite_majors** | Ngành quan tâm (`ma_nganh`, `ten_nganh`) |
+| **message_feedbacks** | Đánh giá tin nhắn bot (`up` / `down`) |
 
-- File PDF học bổng có thể đặt trong `data/raw/` (vd: `data/raw/HỌC BỔNG ĐẠI HỌC NAM CẦN THƠ.pdf`). Dữ liệu đã được trích và chuẩn hóa vào `hoc_bong.json` để seed Neo4j.
-- Hướng dẫn **thêm/sửa dữ liệu học bổng**: xem `docs/HUONG_DAN_THEM_DU_LIEU_HOC_BONG.md`.
+### Neo4j (Knowledge Graph)
+
+| Label | Mô tả (gợi ý sau seed mẫu) |
+|-------|----------------------------|
+| **Nganh** | Ngành đào tạo + embedding vector |
+| **DiemChuan** | Điểm chuẩn theo hình thức |
+| **TohopMon** | Tổ hợp môn |
+| **PhuongThuc** | Phương thức xét tuyển |
+| **NhomNganh** | Nhóm ngành |
+| **HocBong** | Học bổng / hỗ trợ |
+
+**Quan hệ chính:** `HAS_SCORE`, `USES_COMBO`, `BELONGS_TO`, `ACCEPTS_METHOD` (chi tiết xem README phiên bản trước hoặc tài liệu đồ án).
+
+**Vector index:** `Nganh.embedding` — cosine similarity, phục vụ truy vấn ngành/điểm.
 
 ---
 
-## 🚀 Cài đặt & Chạy
+## Luồng xử lý chính
 
-### Yêu cầu
+### Chuẩn bị dữ liệu (offline)
 
-- Docker, Docker Compose  
-- Python 3.11+  
-- Node.js v18+  
-- Gemini API Key (code đang đọc key ở biến `OPENAI_API_KEY` trong file `.env`)
+1. PDF/DOCX → chuẩn hóa JSON vào `data/processed/`.
+2. `python scripts/seed_neo4j.py` — tạo đồ thị, embedding, index trong Neo4j.
 
-### B1. Neo4j
+### Hỏi đáp (online)
+
+1. Client → `POST /api/chat/` với nội dung câu hỏi và session.
+2. Phân loại ý định → (nếu cần) embedding → truy vấn Neo4j.
+3. Ghép context (Graph RAG) → LLM sinh câu trả lời + suggested questions.
+4. Lưu SQLite → trả JSON (answer, sources, …).
+
+---
+
+## Dataset (nguồn tri thức)
+
+| Nguồn | Nội dung | File JSON (`data/processed/`) |
+|-------|----------|-------------------------------|
+| Thông báo điểm chuẩn, thông tin TS 2025, kế hoạch… | Ngành, điểm, tổ hợp, phương thức | `diem_chuan.json`, `nganh_hoc.json`, `tohop_mon.json`, `phuong_thuc.json` |
+| Tài liệu học bổng DNC | Chính sách học bổng | `hoc_bong.json` |
+
+Hướng dẫn thêm/sửa học bổng: `docs/HUONG_DAN_THEM_DU_LIEU_HOC_BONG.md` (nếu có trong repo).
+
+---
+
+## Cài đặt và chạy (local)
+
+### 1. Yêu cầu
+
+- Docker & Docker Compose (Neo4j)
+- Python 3.11+
+- Node.js 18+
+- **Gemini API key** — project đọc qua biến `OPENAI_API_KEY` trong `.env` (tên biến lịch sử; giá trị là key Google AI Studio / Gemini)
+
+### 2. Biến môi trường
+
+```bash
+cp .env.example .env
+```
+
+Chỉnh tối thiểu: `NEO4J_URI`, `NEO4J_USER`, `NEO4J_PASSWORD`, `OPENAI_API_KEY` (Gemini), `FRONTEND_URL`.  
+Quên mật khẩu: `MAIL_*` hoặc `RESEND_API_KEY` + `RESEND_FROM` (xem `.env.example`).
+
+### 3. Neo4j
 
 ```bash
 docker-compose up -d neo4j
 ```
 
-### B2. Backend và seed graph
+### 4. Backend
 
 ```bash
-cp .env.example .env
-# Gợi ý chỉnh trong file .env:
-# - NÊN dùng Neo4j single instance: đặt NEO4J_URI=bolt://127.0.0.1:7687
-# - Gán Gemini API key vào OPENAI_API_KEY (do code đang dùng chung biến tên này)
-# - MAIL_* (nếu dùng tính năng quên mật khẩu qua email)
-
 cd backend
 pip install -r requirements.txt
 python migrate_db.py
-```
-
-Từ **thư mục gốc** project:
-
-```bash
+cd ..
 python scripts/seed_neo4j.py
-```
-
-Sau đó chạy backend:
-
-```bash
 cd backend
 uvicorn main:app --reload --port 8000
 ```
 
-### B3. Frontend
+### 5. Frontend
 
 ```bash
 cd frontend
@@ -308,30 +258,59 @@ npm install
 npm run dev
 ```
 
-Truy cập: **http://localhost:5173/**
-
-
-
-
-
-## Công nghệ sử dụng
-| Công nghệ | Vai trò |
-|---|---|
-| React.js + Vite + Tailwind CSS | Giao diện chat và trải nghiệm người dùng |
-| FastAPI + Uvicorn | Backend API, xử lý nghiệp vụ chatbot |
-| SQLite | Lưu user, session, tin nhắn, favorites và feedback |
-| Neo4j | Knowledge Graph phục vụ Graph RAG |
-| Gemini API (LLM + embeddings) | Phân loại ý định, embedding, sinh câu trả lời |
-| draw.io | Vẽ sơ đồ kiến trúc/DFD/Use Case/ERD |
-
-## Tác giả
-| Nội dung | Thông tin |
-|---|---|
-| **Sinh viên** | DoMinhSang |
-| **Khách hàng** | Đại Học Nam Cần Thơ (DNC) |
-| **Khoa** | Công Nghệ Thông Tin |
-| **Năm** | 2024-2025 |
+Mở **http://localhost:5173/** (API mặc định **http://localhost:8000** — cấu hình trong `frontend` qua `API_URL` / proxy tùy môi trường).
 
 ---
 
-*Chatbot có thể mắc lỗi do AI. Vui lòng đối chiếu với Đề án tuyển sinh và văn bản học bổng chính thức của DNC.*
+## Triển khai Hugging Face Space
+
+| | |
+|---|---|
+| **Space** | [https://huggingface.co/spaces/minhsangdo/dnc-admission-chatbot](https://huggingface.co/spaces/minhsangdo/dnc-admission-chatbot) |
+| **SDK** | Docker (`Dockerfile` — build React static + Uvicorn) |
+| **Cổng** | 7860 |
+
+Chi tiết Secrets (Neo4j, `OPENAI_API_KEY` = Gemini, tự seed KG…): xem **`deploy/hf-README.md`**.
+
+### Biến môi trường gợi ý (Space)
+
+| Biến | Bắt buộc | Mô tả |
+|------|----------|--------|
+| `NEO4J_URI` | Có | URI Bolt/Neo4j Aura |
+| `NEO4J_USER` | Có | User Neo4j |
+| `NEO4J_PASSWORD` | Có | Mật khẩu |
+| `OPENAI_API_KEY` | Có | **Key Gemini** (tên biến giữ theo code) |
+| `FRONTEND_URL` | Không | URL Space (CORS) |
+| `RESEND_API_KEY` | Không | Gửi email quên mật khẩu qua Resend |
+| `RESEND_FROM` | Không | Email người gửi (Resend) |
+| `KG_AUTO_SEED` | Không | `false` để tắt tự seed khi khởi động |
+| `KG_MIN_NGANH_COMPLETE` | Không | Ngưỡng số node `Nganh` coi là đủ dữ liệu |
+
+---
+
+## Công nghệ sử dụng
+
+| Công nghệ | Vai trò |
+|-----------|---------|
+| Python 3.11 | Ngôn ngữ backend |
+| FastAPI + Uvicorn | API REST |
+| React + Vite + Tailwind | Giao diện |
+| SQLite | Dữ liệu người dùng & hội thoại |
+| Neo4j 5.x | Knowledge Graph + vector search |
+| Gemini API | LLM + embeddings + intent |
+| Docker | Neo4j local / HF Space |
+| draw.io | Sơ đồ kiến trúc (trong `docs/`) |
+
+---
+
+## Tác giả
+
+| | |
+|---|---|
+| **Sinh viên** | Đỗ Minh Sang |
+| **Trường / Đơn vị** | Đại học Nam Cần Thơ (DNC) — Khoa Công nghệ Thông tin |
+| **Niên khóa / năm** | 2024–2025 |
+
+---
+
+*Chatbot có thể mắc lỗi do AI. Vui lòng đối chiếu với đề án tuyển sinh và văn bản chính thức của DNC.*
